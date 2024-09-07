@@ -1,11 +1,11 @@
 import {
-  Tag,
   Users,
-  Settings,
-  Bookmark,
-  SquarePen,
+  Building2,
   LayoutGrid,
-  LucideIcon
+  DollarSign,
+  BarChart2,
+  LucideIcon,
+  Sheet
 } from "lucide-react";
 
 type Submenu = {
@@ -18,7 +18,7 @@ type Menu = {
   href: string;
   label: string;
   active: boolean;
-  icon: LucideIcon
+  icon: LucideIcon;
   submenus: Submenu[];
 };
 
@@ -33,66 +33,71 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/dashboard",
-          label: "Dashboard",
-          active: pathname.includes("/dashboard"),
+          href: "/home",
+          label: "Home",
+          active: pathname === "/",
           icon: LayoutGrid,
           submenus: []
         }
       ]
     },
     {
-      groupLabel: "Contents",
+      groupLabel: "Financeiro",
       menus: [
         {
-          href: "",
-          label: "Posts",
-          active: pathname.includes("/posts"),
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/posts",
-              label: "All Posts",
-              active: pathname === "/posts"
-            },
-            {
-              href: "/posts/new",
-              label: "New Post",
-              active: pathname === "/posts/new"
-            }
-          ]
-        },
-        {
-          href: "/categories",
-          label: "Categories",
-          active: pathname.includes("/categories"),
-          icon: Bookmark,
+          href: "/financeiro",
+          label: "Visão Geral Financeira",
+          active: pathname.includes("/financeiro"),
+          icon: DollarSign,
           submenus: []
         },
         {
-          href: "/tags",
-          label: "Tags",
-          active: pathname.includes("/tags"),
-          icon: Tag,
+          href: "",
+          label: "Tabelas",
+          active: pathname.includes("/despesas"),
+          icon: Sheet,
+          submenus: [
+            {
+              href: "/despesas",
+              label: "Despesas",
+              active: pathname.includes("/despesas")
+            },
+            {
+              href: "/entradas",
+              label: "Entradas",
+              active: pathname.includes("/entradas")
+            }
+          ]
+        }
+      ]
+    },
+    {
+      groupLabel: "Gerência",
+      menus: [
+        {
+          href: "/clientes",
+          label: "Clientes",
+          active: pathname.includes("/clientes"),
+          icon: Users,
+          submenus: []
+        },
+        {
+          href: "/empreendimentos",
+          label: "Empreendimentos",
+          active: pathname.includes("/empreendimentos"),
+          icon: Building2,
           submenus: []
         }
       ]
     },
     {
-      groupLabel: "Settings",
+      groupLabel: "Relatórios",
       menus: [
         {
-          href: "/users",
-          label: "Users",
-          active: pathname.includes("/users"),
-          icon: Users,
-          submenus: []
-        },
-        {
-          href: "/account",
-          label: "Account",
-          active: pathname.includes("/account"),
-          icon: Settings,
+          href: "/relatorios",
+          label: "Relatórios Financeiros",
+          active: pathname.includes("/relatorios"),
+          icon: BarChart2,
           submenus: []
         }
       ]

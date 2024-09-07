@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AdminPanelLayout>{children}</AdminPanelLayout>
+          {children}
         </ThemeProvider>
       </body>
     </html>
