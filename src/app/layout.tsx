@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
 import { ThemeProvider } from "@/providers/theme-provider";
-import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   title: "Projeto",
   description: "",
   alternates: {
-    canonical: "/",
+    canonical: "/home",
   },
 };
 

@@ -19,6 +19,20 @@ const config = {
     },
     extend: {
       colors: {
+        // light: {
+        //   background: '#f9fafb', // Cor de fundo clara
+        //   primary: '#3d737f', // Verde principal
+        //   secondary: '#a0aec0', // Cor secundária
+        //   accent: '#edf2f7', // Cor de destaque
+        //   text: '#2d3748', // Cor de texto
+        // },
+        // // Paleta de cores do tema escuro
+        // dark: {
+        //   primary: '#222831', // Verde principal
+        //   secondary: '#31363F', // Cor secundária
+        //   accent: '#76ABAE', // Cor de destaque
+        //   text: '#EEEEEE', // Cor de texto
+        // },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

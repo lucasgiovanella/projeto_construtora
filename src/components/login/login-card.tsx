@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 export default function Logincard() {
   return (
     <>
-      <Card className="mx-auto max-w-md bg-zinc-900 text-zinc-100 border-zinc-700">
+      <Card className="max-w-md bg-zinc-900 text-zinc-100 border-zinc-700 backdrop-blur-md bg-opacity-90">
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>
@@ -40,7 +40,7 @@ export default function Logincard() {
                 required
               />
             </div>
-            <Button type="submit" variant={"login_button"}>
+            <Button className="bg-[#3d727f] hover:bg-[#3d737f]/90 text-white w-full">
               Login
             </Button>
           </div>
