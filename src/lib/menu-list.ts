@@ -5,7 +5,8 @@ import {
   DollarSign,
   BarChart2,
   LucideIcon,
-  Sheet
+  Sheet,
+  BookUser,
 } from "lucide-react";
 
 type Submenu = {
@@ -35,41 +36,52 @@ export function getMenuList(pathname: string): Group[] {
         {
           href: "/home",
           label: "Home",
-          active: pathname === "/",
+          active: pathname === "/home",
           icon: LayoutGrid,
-          submenus: []
-        }
-      ]
+          submenus: [],
+        },
+      ],
     },
     {
       groupLabel: "Financeiro",
       menus: [
         {
-          href: "/financeiro",
-          label: "Visão Geral Financeira",
-          active: pathname.includes("/financeiro"),
+          href: "",
+          label: "Financeiro",
+          active: false, 
           icon: DollarSign,
-          submenus: []
+          submenus: [
+            {
+              href: "/financeiro/visao-geral",
+              label: "Visão Geral",
+              active: pathname === "/financeiro/visao-geral", 
+            },
+            {
+              href: "/financeiro/metodos-pagamento",
+              label: "Métodos de Pagamento",
+              active: pathname.includes("/financeiro/metodos-pagamento"),
+            },
+          ],
         },
         {
           href: "",
           label: "Tabelas",
-          active: pathname.includes("/despesas"),
+          active: false,
           icon: Sheet,
           submenus: [
             {
-              href: "/despesas",
+              href: "/tabela/despesas",
               label: "Despesas",
-              active: pathname.includes("/despesas")
+              active: pathname.includes("/tabela/despesas"),
             },
             {
-              href: "/entradas",
+              href: "/tabela/entradas",
               label: "Entradas",
-              active: pathname.includes("/entradas")
-            }
-          ]
-        }
-      ]
+              active: pathname.includes("/tabela/entradas"),
+            },
+          ],
+        },
+      ],
     },
     {
       groupLabel: "Gerência",
@@ -79,16 +91,23 @@ export function getMenuList(pathname: string): Group[] {
           label: "Clientes",
           active: pathname.includes("/clientes"),
           icon: Users,
-          submenus: []
+          submenus: [],
         },
         {
           href: "/empreendimentos",
           label: "Empreendimentos",
           active: pathname.includes("/empreendimentos"),
           icon: Building2,
-          submenus: []
-        }
-      ]
+          submenus: [],
+        },
+        {
+          href: "/equipe",
+          label: "Equipe",
+          active: pathname.includes("/equipe"),
+          icon: BookUser,
+          submenus: [],
+        },
+      ],
     },
     {
       groupLabel: "Relatórios",
@@ -98,9 +117,9 @@ export function getMenuList(pathname: string): Group[] {
           label: "Relatórios Financeiros",
           active: pathname.includes("/relatorios"),
           icon: BarChart2,
-          submenus: []
-        }
-      ]
-    }
+          submenus: [],
+        },
+      ],
+    },
   ];
 }

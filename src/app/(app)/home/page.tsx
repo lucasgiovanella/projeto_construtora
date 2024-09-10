@@ -3,8 +3,9 @@ import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import {
   GraficoVisitasEmpreendimento,
   GraficoEntradaDespesas,
-  GraficoNumVisitas
-} from "@/components/home"
+  GraficoNumClientes,
+  ClientCard,
+} from "@/components/home";
 
 export default function DashboardPage() {
   const breadcrumbItems = [
@@ -19,13 +20,13 @@ export default function DashboardPage() {
           <GraficoVisitasEmpreendimento />
         </div>
         <div>
-          <GraficoNumVisitas />
+          <GraficoNumClientes />
         </div>
         <div className="md:col-span-2 md:col-start-1 md:row-start-2">
           <GraficoEntradaDespesas />
         </div>
         <div className="md:row-span-2 md:col-start-3 md:row-start-1">
-          <div>4</div>{" "}
+          <ClientCard />
         </div>
       </div>
     </ContentLayout>

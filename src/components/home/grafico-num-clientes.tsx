@@ -36,7 +36,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function GraficoNumVisitas() {
+export default function GraficoNumClientes() {
   return (
     <Card>
       <CardHeader>
