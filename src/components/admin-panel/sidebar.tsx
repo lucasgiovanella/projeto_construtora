@@ -10,8 +10,8 @@ import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
-  
-  if(!sidebar) return null;
+
+  if (!sidebar) return null;
 
   return (
     <aside
@@ -40,7 +40,7 @@ export function Sidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              Projeto
+              LTJ SOFTWARE
             </h1>
           </Link>
         </Button>

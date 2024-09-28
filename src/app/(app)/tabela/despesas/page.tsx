@@ -1,5 +1,6 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
+import TabelaDespesa from "@/components/tables/tabela-despesa";
 
 export default function DespesasPage() {
   return (
@@ -12,8 +13,8 @@ export default function DespesasPage() {
         ]}
         currentPage="Despesas"
       />
-      <div>
-        <h1>Despesas</h1>
+      <div className="mt-2">
+        <TabelaDespesa />
       </div>
     </ContentLayout>
   );
