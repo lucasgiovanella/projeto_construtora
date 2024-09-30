@@ -1,14 +1,12 @@
 import React from "react";
-import FilterHeading from "./filter-heading";
-import { columns } from "./table-body/columns";
-import { TablePagination } from "./table-body/table-pagination";
+import { columnsDespesas } from "./table-body/columns";
 import TableBodyDespesas from "./table-body";
+import { data } from "@/test/test-data";
 
 const TabelaDespesa = () => {
   return (
     <div className="flex flex-col bg-white w-full h-full shadow rounded dark:bg-black">
-      {/* <FilterHeading /> */}
-      <TableBodyDespesas/>
+      <TableBodyDespesas columns={columnsDespesas} data={data} />
     </div>
   );
 };

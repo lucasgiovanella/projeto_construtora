@@ -46,22 +46,11 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Financeiro",
       menus: [
         {
-          href: "",
+          href: "/financeiro",
           label: "Financeiro",
-          active: false, 
+          active: pathname === "/financeiro",
           icon: DollarSign,
-          submenus: [
-            {
-              href: "/financeiro/visao-geral",
-              label: "Visão Geral",
-              active: pathname === "/financeiro/visao-geral", 
-            },
-            {
-              href: "/financeiro/metodos-pagamento",
-              label: "Métodos de Pagamento",
-              active: pathname.includes("/financeiro/metodos-pagamento"),
-            },
-          ],
+          submenus: [],
         },
         {
           href: "",
@@ -109,17 +98,17 @@ export function getMenuList(pathname: string): Group[] {
         },
       ],
     },
-    {
-      groupLabel: "Relatórios",
-      menus: [
-        {
-          href: "/relatorios",
-          label: "Relatórios Financeiros",
-          active: pathname.includes("/relatorios"),
-          icon: BarChart2,
-          submenus: [],
-        },
-      ],
-    },
+    // {
+    //   groupLabel: "Relatórios",
+    //   menus: [
+    //     {
+    //       href: "/relatorios",
+    //       label: "Relatórios Financeiros",
+    //       active: pathname.includes("/relatorios"),
+    //       icon: BarChart2,
+    //       submenus: [],
+    //     },
+    //   ],
+    // },
   ];
 }

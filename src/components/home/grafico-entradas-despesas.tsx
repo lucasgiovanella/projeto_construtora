@@ -25,44 +25,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-// Dados atualizados com entradas e despesas recentes
-const chartData = [
-  { date: "2024-08-01", entrada: 1200, despesa: 800 },
-  { date: "2024-08-02", entrada: 1500, despesa: 1200 },
-  { date: "2024-08-03", entrada: 1100, despesa: 900 },
-  { date: "2024-08-04", entrada: 1300, despesa: 1100 },
-  { date: "2024-08-05", entrada: 1600, despesa: 1400 },
-  { date: "2024-08-06", entrada: 1700, despesa: 1500 },
-  { date: "2024-08-07", entrada: 1400, despesa: 1300 },
-  { date: "2024-08-08", entrada: 1800, despesa: 1700 },
-  { date: "2024-08-09", entrada: 1200, despesa: 1000 },
-  { date: "2024-08-10", entrada: 1500, despesa: 1200 },
-  { date: "2024-08-11", entrada: 1700, despesa: 1600 },
-  { date: "2024-08-12", entrada: 1900, despesa: 1800 },
-  { date: "2024-08-13", entrada: 2100, despesa: 2000 },
-  { date: "2024-08-14", entrada: 2300, despesa: 2200 },
-  { date: "2024-08-15", entrada: 2200, despesa: 1900 },
-  { date: "2024-08-16", entrada: 2400, despesa: 2000 },
-  { date: "2024-08-17", entrada: 2600, despesa: 2300 },
-  { date: "2024-08-18", entrada: 2500, despesa: 2200 },
-  { date: "2024-08-19", entrada: 2700, despesa: 2500 },
-  { date: "2024-08-20", entrada: 2900, despesa: 2700 },
-];
+import { data } from "@/test/test-graph";
 
 const chartConfig = {
-  entrada: {
-    label: "Entrada",
-  },
   despesa: {
     label: "Despesa",
+    color: "#e3743d",
+  },
+  entrada: {
+    label: "Entrada",
+    color: "#3d737f",
   },
 } satisfies ChartConfig;
 
 export default function GraficoEntradaDespesas() {
   const [timeRange, setTimeRange] = React.useState("90d");
 
-  const filteredData = chartData.filter((item) => {
+  const filteredData = data.filter((item) => {
     const date = new Date(item.date);
     const now = new Date();
     let daysToSubtract = 90;
@@ -150,17 +129,17 @@ export default function GraficoEntradaDespesas() {
               }
             />
             <Area
-              dataKey="entrada"
-              type="natural"
-              fill="url(#fillEntrada)"
-              stroke="#3d737f"
-              stackId="a"
-            />
-            <Area
               dataKey="despesa"
               type="natural"
               fill="url(#fillDespesa)"
               stroke="#e3743d"
+              stackId="a"
+            />
+            <Area
+              dataKey="entrada"
+              type="natural"
+              fill="url(#fillEntrada)"
+              stroke="#3d737f"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />

@@ -16,17 +16,17 @@ export default function DashboardPage() {
     <ContentLayout title="Home">
       <Breadcrumbs items={breadcrumbItems} currentPage="Home" />
       <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 mt-4">
-        <div>
-          <GraficoVisitasEmpreendimento />
-        </div>
-        <div>
-          <GraficoNumClientes />
-        </div>
-        <div className="md:col-span-2 md:col-start-1 md:row-start-2">
+        <div className="md:col-span-2 md:col-start-1 md:row-start-1">
           <GraficoEntradaDespesas />
         </div>
         <div className="md:row-span-2 md:col-start-3 md:row-start-1">
-          <ClientCard />
+          {/* <ClientCard /> */}
+        </div>
+        <div>
+          {/* <GraficoNumClientes /> */}
+        </div>
+        <div>
+          {/* <GraficoVisitasEmpreendimento /> */}
         </div>
       </div>
     </ContentLayout>
