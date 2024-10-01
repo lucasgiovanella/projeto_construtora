@@ -28,7 +28,7 @@ export function SheetMenu() {
           >
             <Link href="/dashboard" className="flex items-center gap-2">
               <PanelsTopLeft className="w-6 h-6 mr-1" />
-              <SheetTitle className="font-bold text-lg">Projeto</SheetTitle>
+              <SheetTitle className="font-bold text-lg">LTJ SOFTWARE</SheetTitle>
             </Link>
           </Button>
         </SheetHeader>
