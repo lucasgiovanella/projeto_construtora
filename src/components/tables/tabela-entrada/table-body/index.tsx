@@ -33,17 +33,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import CreateFormDespesa from "../../create/create-form-despesa";
+import CreateFormReceita from "../../create/create-form-receita";
 
-interface TableDespesasProps {
-  columns: ColumnDef<Despesas>[];
-  data: Despesas[];
+interface TableReceitaProps {
+  columns: ColumnDef<Receitas>[];
+  data: Receitas[];
 }
 
-export default function TableBodyDespesas({
-  columns,
-  data,
-}: TableDespesasProps) {
+export default function TableBodyReceita({ columns, data }: TableReceitaProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -93,7 +90,7 @@ export default function TableBodyDespesas({
             >
               <Download className="h-4 w-4" />
             </Button>
-            <CreateFormDespesa />
+            <CreateFormReceita />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -1,19 +1,20 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
+import TabelaReceita from "@/components/tables/tabela-entrada";
 
-export default function EntradasPage() {
+export default function ReceitasPage() {
   return (
-    <ContentLayout title="Entradas">
+    <ContentLayout title="Receitas">
       <Breadcrumbs
         items={[
           { href: "/home", label: "Home" },
           { href: "/tabela/entradas", label: "Tabelas" },
           { label: "Entradas" },
         ]}
-        currentPage="Entradas"
+        currentPage="Receitas"
       />
-      <div>
-        <h1>Entradas</h1>
+      <div className="mt-2">
+        <TabelaReceita />
       </div>
     </ContentLayout>
   );

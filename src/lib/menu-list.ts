@@ -7,6 +7,8 @@ import {
   LucideIcon,
   Sheet,
   BookUser,
+  Bookmark,
+  Package,
 } from "lucide-react";
 
 type Submenu = {
@@ -76,10 +78,10 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Gerência",
       menus: [
         {
-          href: "/clientes",
-          label: "Clientes",
-          active: pathname.includes("/clientes"),
-          icon: Users,
+          href: "/categorias",
+          label: "Categorias",
+          active: pathname.includes("/categorias"),
+          icon: Bookmark,
           submenus: [],
         },
         {
@@ -87,6 +89,13 @@ export function getMenuList(pathname: string): Group[] {
           label: "Empreendimentos",
           active: pathname.includes("/empreendimentos"),
           icon: Building2,
+          submenus: [],
+        },
+        {
+          href: "/fornecedores",
+          label: "Fornecedores",
+          active: pathname.includes("/fornecedores"),
+          icon: Package,
           submenus: [],
         },
         {
@@ -98,17 +107,6 @@ export function getMenuList(pathname: string): Group[] {
         },
       ],
     },
-    // {
-    //   groupLabel: "Relatórios",
-    //   menus: [
-    //     {
-    //       href: "/relatorios",
-    //       label: "Relatórios Financeiros",
-    //       active: pathname.includes("/relatorios"),
-    //       icon: BarChart2,
-    //       submenus: [],
-    //     },
-    //   ],
-    // },
+
   ];
 }

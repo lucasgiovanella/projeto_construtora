@@ -16,8 +16,7 @@ import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
 
-export const columnsDespesas: ColumnDef<Despesas>[] = [
-  // Coluna de seleção
+export const columnsReceitas: ColumnDef<Receitas>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -55,17 +54,11 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
       <div className="font-medium">R$ {row.getValue("preco")}</div>
     ),
   },
-  // Coluna do fornecedor
+  // Coluna da descrição
   {
-    accessorKey: "fornecedor_id",
-    header: "Fornecedor",
-    cell: ({ row }) => <div>{row.getValue("fornecedor_id")}</div>,
-  },
-  // Coluna do número da nota
-  {
-    accessorKey: "num_nota",
-    header: "Nº Nota",
-    cell: ({ row }) => <div>{row.getValue("num_nota")}</div>,
+    accessorKey: "descricao",
+    header: "Descrição",
+    cell: ({ row }) => <div>{row.getValue("descricao")}</div>,
   },
   // Coluna da categoria
   {
@@ -73,7 +66,7 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
     header: "Categoria",
     cell: ({ row }) => <div>{row.getValue("categorias_id")}</div>,
   },
-  //coluna de descrição
+  // Coluna de descrição
   {
     accessorKey: "descricao",
     header: "Descrição",
@@ -81,16 +74,27 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
   },
   // Coluna da data de lançamento
   {
-    accessorKey: "data_lancamento",
+    accessorKey: "data_lanc",
     header: "Data de Lançamento",
-    cell: ({ row }) => <div>{row.getValue("data_lancamento")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {row.getValue("data_lanc")}
+      </div>
+    ),
   },
+  // Coluna do empreendimento
+  {
+    accessorKey: "empreendimento_id",
+    header: "Empreendimento",
+    cell: ({ row }) => <div>{row.getValue("empreendimento_id")}</div>,
+  },
+  // Coluna de ações
   {
     id: "actions",
     header: "Ações",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const income = row.original;
 
       return (
         <DropdownMenu>
@@ -103,11 +107,11 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(income.id)}
             >
-              Copiar ID do pagamento
+              Copiar ID da receita
             </DropdownMenuItem>
-            <DropdownMenuItem>Editar pagamento</DropdownMenuItem>
+            <DropdownMenuItem>Editar receita</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

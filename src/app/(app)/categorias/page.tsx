@@ -1,16 +1,16 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 
-export default function ClientesPage() {
+export default function CategoriasPage() {
   return (
     <>
-      <ContentLayout title="Clientes">
+      <ContentLayout title="Categorias">
         <Breadcrumbs
-          items={[{ href: "/home", label: "Home" }, { label: "Clientes" }]}
-          currentPage="Clientes"
+          items={[{ href: "/home", label: "Home" }, { label: "Categorias" }]}
+          currentPage="Categorias"
         />
         <div>
-          <h1>Clientes</h1>
+          <h1>Categorias</h1>
         </div>
       </ContentLayout>
     </>
