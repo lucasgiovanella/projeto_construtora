@@ -1,5 +1,6 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
+import UserProfile from "@/components/perfil";
 
 export default function PerfilPage() {
   return (
@@ -8,8 +9,8 @@ export default function PerfilPage() {
         items={[{ href: "/home", label: "Home" }, { label: "Perfil" }]}
         currentPage="Perfil"
       />
-      <div>
-        <h1>Perfil</h1>
+      <div className="mt-2">
+        <UserProfile />
       </div>
     </ContentLayout>
   );
