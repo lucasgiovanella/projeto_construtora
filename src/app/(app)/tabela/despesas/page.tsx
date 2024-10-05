@@ -1,6 +1,6 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
-import TabelaDespesa from "@/components/tables/tabela-despesa";
+import TabelaDespesa from "@/components/tabelas/tabela-despesa";
 
 export default function DespesasPage() {
   return (

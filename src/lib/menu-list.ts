@@ -66,9 +66,9 @@ export function getMenuList(pathname: string): Group[] {
               active: pathname.includes("/tabela/despesas"),
             },
             {
-              href: "/tabela/entradas",
-              label: "Entradas",
-              active: pathname.includes("/tabela/entradas"),
+              href: "/tabela/receitas",
+              label: "Receitas",
+              active: pathname.includes("/tabela/receitas"),
             },
           ],
         },

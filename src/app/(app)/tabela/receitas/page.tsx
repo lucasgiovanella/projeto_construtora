@@ -1,6 +1,6 @@
 import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
-import TabelaReceita from "@/components/tables/tabela-entrada";
+import TabelaReceita from "@/components/tabelas/tabela-entrada";
 
 export default function ReceitasPage() {
   return (

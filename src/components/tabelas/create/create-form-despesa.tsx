@@ -11,13 +11,14 @@ import {
 } from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
 import React from "react";
+import FormDespesa from "./forms/form-despesa";
 
-const CreateFormReceita = () => {
+const CreateFormDespesa = () => {
   return (
     <Sheet>
       <SheetTrigger>
         <Button variant={"outline"} className="hidden lg:inline-flex">
-          Adicionar Receita
+          Adicionar Despesa
         </Button>
         <Button variant={"outline"} className="inline-flex lg:hidden">
           <Plus className="h-4 w-4" />
@@ -25,21 +26,25 @@ const CreateFormReceita = () => {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Adicionar Receita</SheetTitle>
+          <SheetTitle>Adicionar Despesa</SheetTitle>
           <SheetDescription>
-            Preencha os campos abaixo para adicionar uma nova Receita.
+            Preencha os campos abaixo para adicionar uma nova despesa.
           </SheetDescription>
         </SheetHeader>
-        formulário aqui
+        <FormDespesa />
         <SheetFooter>
-          <SheetClose>
-            <Button variant={"outline"}>Cancelar</Button>
-          </SheetClose>
-          <Button>Adicionar</Button>
+          <div className="fixed bottom-4 space-x-4">
+            <SheetClose>
+              <Button variant={"outline"}>Cancelar</Button>
+            </SheetClose>
+            <Button type="submit" form="form-despesas">
+              Adicionar
+            </Button>
+          </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>
   );
 };
 
-export default CreateFormReceita;
+export default CreateFormDespesa;
