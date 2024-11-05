@@ -6,7 +6,6 @@ export default function NotFound() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redireciona o usuário para /home
     router.replace("/home");
   }, [router]);
 

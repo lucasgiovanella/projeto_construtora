@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutGrid, LogOut, User } from "lucide-react";
+import { User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,7 +9,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -18,10 +18,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/use-auth";
 
 export function UserNav() {
+  const user = useAuth((state) => state.user);
+
   return (
     <DropdownMenu>
       <TooltipProvider disableHoverableContent>
@@ -45,10 +48,13 @@ export function UserNav() {
 
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{"Lucas Giovanella"}</p>
+          <div className="flex flex-col space-y-2">
+            <p className="text-sm font-medium leading-none">{user?.nome}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              email@gamil.com
+              {user !== null && user.cargo.charAt(0).toUpperCase() + user.cargo.slice(1)}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -57,7 +63,7 @@ export function UserNav() {
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
             <Link href="/perfil" className="flex items-center">
               <User className="w-4 h-4 mr-3 text-muted-foreground" />
-              Conta
+              <span>Perfil</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

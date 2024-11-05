@@ -1,33 +1,52 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListCategorias from "./list/list-categories";
 import CreateCategoria from "./create/create-categorie";
 import { Separator } from "../ui/separator";
 
 type Category = {
   id: number;
-  name: string;
+  nome: string;
 };
 
 const Categorias = () => {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Categoria 1" },
-    { id: 2, name: "Categoria 2" },
-    { id: 3, name: "Categoria 3" },
-    { id: 4, name: "Categoria 4" },
-    { id: 5, name: "Categoria 5" },
-    { id: 6, name: "Categoria 6" },
-  ]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const addCategory = (name: string) => {
+  const fetchCategories = async () => {
+    const response = await fetch("http://localhost:3000/api/categorias", {
+      credentials: "include",
+    });
+    const data = await response.json();
+    setCategories(data);
+  };
+
+  const addCategory = async (nome: string) => {
+    const response = await fetch("http://localhost:3000/api/categorias", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ nome }),
+    });
+    const data = await response.json();
     setCategories((prevCategories) => [
       ...prevCategories,
-      { id: prevCategories.length + 1, name },
+      { id: data.id, nome: data.nome },
     ]);
   };
 
-  const removeCategory = (id: number) => {
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const removeCategory = async (id: number) => {
+    await fetch(`http://localhost:3000/api/categorias/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
     setCategories((prevCategories) =>
       prevCategories.filter((category) => category.id !== id)
     );
