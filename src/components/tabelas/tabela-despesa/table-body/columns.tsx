@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
 import { Despesas } from "@/@types/types";
+import { useDespesas } from "@/hooks/use-despesas";
 
 export const columnsDespesas: ColumnDef<Despesas>[] = [
   // Coluna de seleção
@@ -78,7 +79,9 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
-    cell: ({ row }) => <DescricaoLabel />,
+    cell: ({ row }) => (
+      <DescricaoLabel title="Despesa" content={row.getValue("descricao")} />
+    ),
   },
   // Coluna da data de lançamento
   {
@@ -90,28 +93,54 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
     id: "actions",
     header: "Ações",
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copiar ID do pagamento
-            </DropdownMenuItem>
-            <DropdownMenuItem>Editar pagamento</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ];
+
+const ActionsCell = ({ row }) => {
+  const despesaId = row.original.id;
+
+  const { deleteDespesa, isLoading } = useDespesas({
+    data: row.original,
+    setData: () => {},
+  });
+
+  const handleDelete = async () => {
+    if (confirm("Tem certeza que deseja deletar esta despesa?")) {
+      try {
+        await deleteDespesa(despesaId);
+        alert("Despesa deletada com sucesso");
+      } catch (error) {
+        alert("Erro ao deletar despesa");
+        console.error(error);
+      }
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel className="underline">Ações</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => navigator.clipboard.writeText(despesaId)}
+        >
+          Copiar ID da despesa
+        </DropdownMenuItem>
+        <DropdownMenuItem>Editar despesa</DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="text-red-400 dark:text-red-600"
+          onClick={handleDelete}
+        >
+          Deletar despesa
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

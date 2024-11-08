@@ -233,7 +233,7 @@ export default function CreateFormDespesa() {
                       {fornecedor.nome}
                     </SelectItem>
                   ))}
-                </SelectContent>
+                </SelectContent>  
               </Select>
               <FormMessage />
             </FormItem>

@@ -15,6 +15,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
+import { Receitas } from "@/@types/types";
 
 export const columnsReceitas: ColumnDef<Receitas>[] = [
   {
@@ -70,17 +71,15 @@ export const columnsReceitas: ColumnDef<Receitas>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
-    cell: ({ row }) => <DescricaoLabel />,
+    cell: ({ row }) => (
+      <DescricaoLabel title="Receita" content={row.getValue("descricao")} />
+    ),
   },
   // Coluna da data de lançamento
   {
     accessorKey: "data_lanc",
     header: "Data de Lançamento",
-    cell: ({ row }) => (
-      <div>
-        {row.getValue("data_lanc")}
-      </div>
-    ),
+    cell: ({ row }) => <div>{parseDate(row.getValue("data_lanc"))}</div>,
   },
   // Coluna do empreendimento
   {

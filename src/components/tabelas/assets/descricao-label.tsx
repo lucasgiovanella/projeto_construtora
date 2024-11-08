@@ -15,8 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
-const DescricaoLabel = () => {
+interface DescricaoLabelProps {
+  title: string;
+  content?: string;
+}
 
+const DescricaoLabel = ({ title, content }: DescricaoLabelProps) => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -26,10 +30,16 @@ const DescricaoLabel = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Descrição da receita ...</DialogTitle>
+          <DialogTitle>Descrição da {title}</DialogTitle>
         </DialogHeader>
-        <Textarea placeholder="Descrição da nota ..." rows={5} />
-        <DialogFooter className="sm:justify-start">
+        <Textarea
+          placeholder="Descrição da nota ..."
+          value={content}
+          contentEditable={false}
+          maxLength={200}
+          rows={5}
+        />
+        {/* <DialogFooter className="sm:justify-start">
           <div className="flex items-center justify-end w-full gap-2">
             <DialogClose asChild>
               <Button type="button" variant="secondary">
@@ -40,7 +50,7 @@ const DescricaoLabel = () => {
               Salvar
             </Button>
           </div>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

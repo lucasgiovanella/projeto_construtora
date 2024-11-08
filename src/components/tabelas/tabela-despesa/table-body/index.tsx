@@ -43,8 +43,9 @@ interface TableDespesasProps {
 
 export default function TableBodyDespesas({
   columns,
-  data,
+  data: initialData,
 }: TableDespesasProps) {
+  const [data, setData] = useState(initialData);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -53,7 +54,15 @@ export default function TableBodyDespesas({
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns.map(col => {
+      if (col.id === 'actions') {
+        return {
+          ...col,
+          cell: (props) => col.cell!({ ...props, setData })
+        };
+      }
+      return col;
+    }),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
