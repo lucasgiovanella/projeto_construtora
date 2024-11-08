@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={GeistSans.className}>
         <PrivateRoute>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
           </ThemeProvider>
         </PrivateRoute>
