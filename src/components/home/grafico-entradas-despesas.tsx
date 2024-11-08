@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import {
   Card,
   CardContent,
@@ -11,12 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
   Select,
@@ -27,37 +22,89 @@ import {
 } from "@/components/ui/select";
 import { data } from "@/test/test-graph";
 
-const chartConfig = {
-  despesa: {
-    label: "Despesa",
-    color: "#e3743d",
+// Primeiro, defina as cores baseadas no tema
+const chartThemes = {
+  light: {
+    entrada: "hsl(200 60% 37%)",
+    despesa: "hsl(15 90% 57%)",
+    background: "hsl(0 0% 100%)",
+    text: "hsl(0 0% 20%)",
+    grid: "hsl(0 0% 90%)",
   },
-  entrada: {
-    label: "Entrada",
-    color: "#3d737f",
+  dark: {
+    entrada: "hsl(200 70% 50%)",
+    despesa: "hsl(15 90% 60%)",
+    background: "hsl(0 0% 10%)",
+    text: "hsl(0 0% 90%)",
+    grid: "hsl(0 0% 20%)",
   },
-} satisfies ChartConfig;
+} as const;
+
+// Componente CustomTooltip
+const CustomTooltip = ({ active, payload }: any) => {
+  if (!active || !payload?.length) return null;
+
+  return (
+    <div className="bg-background/95 border rounded-lg p-3 shadow-lg backdrop-blur-sm">
+      <p className="text-sm font-medium mb-1">
+        {new Date(payload[0]?.payload?.date).toLocaleDateString()}
+      </p>
+      {payload.map((entry: any, index: number) => (
+        <div key={index} className="flex items-center gap-2">
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-sm text-muted-foreground">
+            {entry.name === "entrada" ? "Entrada" : "Despesa"}:
+          </span>
+          <span className="text-sm font-medium">
+            R$ {entry.value.toLocaleString()}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const filterDataByTimeRange = (data: any[], timeRange: string) => {
+  const now = new Date();
+  const daysMap = {
+    "30d": 30,
+    "90d": 90,
+    "180d": 180,
+    "365d": 365,
+  };
+
+  const days = daysMap[timeRange as keyof typeof daysMap] || 90;
+  const cutoffDate = new Date(now.setDate(now.getDate() - days));
+
+  return data.filter((item) => new Date(item.date) >= cutoffDate);
+};
 
 export default function GraficoEntradaDespesas() {
   const [timeRange, setTimeRange] = React.useState("90d");
+  const [activeTheme, setActiveTheme] = React.useState<keyof typeof chartThemes>("light");
+  const filteredData = React.useMemo(
+    () => filterDataByTimeRange(data, timeRange),
+    [timeRange]
+  );
 
-  const filteredData = data.filter((item) => {
-    const date = new Date(item.date);
-    const now = new Date();
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    now.setDate(now.getDate() - daysToSubtract);
-    return date >= now;
-  });
+  React.useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--chart-1",
+      chartThemes[activeTheme].despesa
+    );
+    document.documentElement.style.setProperty(
+      "--chart-2",
+      chartThemes[activeTheme].entrada
+    );
+  }, [activeTheme]);
 
   return (
-    <Card className="h-full">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-        <div className="grid flex-1 gap-1 text-center sm:text-left">
+    <Card className="w-full max-w-4xl">
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between gap-2 space-y-0 border-b py-5">
+        <div className="grid gap-1 text-center sm:text-left">
           <CardTitle>Entradas x Despesas</CardTitle>
           <CardDescription>
             Comparação recente entre entradas e despesas
@@ -65,86 +112,72 @@ export default function GraficoEntradaDespesas() {
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
-            className="w-[160px] rounded-lg sm:ml-auto"
+            className="w-[160px] rounded-lg"
             aria-label="Selecione o intervalo de tempo"
           >
             <SelectValue placeholder="Últimos 3 meses" />
           </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="90d" className="rounded-lg">
-              Últimos 3 meses
-            </SelectItem>
-            <SelectItem value="30d" className="rounded-lg">
-              Últimos 30 dias
-            </SelectItem>
-            <SelectItem value="7d" className="rounded-lg">
-              Últimos 7 dias
-            </SelectItem>
+          <SelectContent>
+            <SelectItem value="30d">Últimos 30 dias</SelectItem>
+            <SelectItem value="90d">Últimos 3 meses</SelectItem>
+            <SelectItem value="180d">Últimos 180 dias</SelectItem>
+            <SelectItem value="365d">Último ano</SelectItem>
           </SelectContent>
         </Select>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
-        >
-          <AreaChart data={filteredData}>
-            <defs>
-              <linearGradient id="fillEntrada" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3d737f" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#3d737f" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="fillDespesa" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#e3743d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#e3743d" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("pt-BR", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("pt-BR", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
-                  indicator="line"
-                />
-              }
-            />
-            <Area
-              dataKey="despesa"
-              type="natural"
-              fill="url(#fillDespesa)"
-              stroke="#e3743d"
-              stackId="a"
-            />
-            <Area
-              dataKey="entrada"
-              type="natural"
-              fill="url(#fillEntrada)"
-              stroke="#3d737f"
-              stackId="a"
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
+      <CardContent className="pt-6 px-2 sm:px-6">
+        <ChartContainer config={chartThemes} className="h-[350px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart 
+              data={filteredData}
+              margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+            >
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                vertical={false}
+                stroke={activeTheme === "dark" ? chartThemes.dark.grid : chartThemes.light.grid}
+              />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+                padding={{ left: 0, right: 0 }}
+                tick={{ fill: activeTheme === "dark" ? chartThemes.dark.text : chartThemes.light.text }}
+              />
+              <YAxis
+                tickFormatter={(value: number) => `R$ ${value}`}
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+                width={80}
+                allowDecimals={false}
+                tick={{ fill: activeTheme === "dark" ? chartThemes.dark.text : chartThemes.light.text }}
+              />
+              <Tooltip 
+                content={<CustomTooltip />}
+                cursor={{ 
+                  fill: activeTheme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+                  radius: [4, 4, 0, 0],
+                }}
+              />
+              <Bar
+                dataKey="despesa"
+                fill={activeTheme === "dark" ? chartThemes.dark.despesa : chartThemes.light.despesa}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={50}
+              />
+              <Bar
+                dataKey="entrada"
+                fill={activeTheme === "dark" ? chartThemes.dark.entrada : chartThemes.light.entrada}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={50}
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </ChartContainer>
+        <ChartLegend className="mt-4" />
       </CardContent>
     </Card>
   );

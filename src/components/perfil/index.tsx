@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -15,14 +15,10 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function UserProfile() {
-  const [user, setUser] = useState({
-    name: "Nome do usuário",
-    email: "email@example.com",
-    username: "@username",
-    profileImage: "/placeholder.svg?height=128&width=128",
-  });
+  const user = useAuth((state) => state.user);
 
   const [newPassword, setNewPassword] = useState("");
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
@@ -37,32 +33,32 @@ export default function UserProfile() {
     onDrop,
   });
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newUsername = e.target.value;
-    if (!newUsername.startsWith("@")) {
-      newUsername = "@" + newUsername;
-    }
-    setUser({ ...user, username: newUsername });
-  };
+  // const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   let newUsername = e.target.value;
+  //   if (!newUsername.startsWith("@")) {
+  //     newUsername = "@" + newUsername;
+  //   }
+  //   setUser({ ...user, username: newUsername });
+  // };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the updated user data to your backend
-    const updatedUser = { ...user };
-    if (newProfileImage) {
-      updatedUser.profileImage = URL.createObjectURL(newProfileImage);
-    }
-    setUser(updatedUser);
-    console.log("Updated user data:", updatedUser);
-    console.log("New password:", newPassword);
-    // Reset the newPassword and newProfileImage states after saving
-    setNewPassword("");
-    setNewProfileImage(null);
-  };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Here you would typically send the updated user data to your backend
+  //   const updatedUser = { ...user };
+  //   if (newProfileImage) {
+  //     updatedUser.profileImage = URL.createObjectURL(newProfileImage);
+  //   }
+  //   setUser(updatedUser);
+  //   console.log("Updated user data:", updatedUser);
+  //   console.log("New password:", newPassword);
+  //   // Reset the newPassword and newProfileImage states after saving
+  //   setNewPassword("");
+  //   setNewProfileImage(null);
+  // };
 
   return (
     <div className="container mx-auto p-4">
@@ -82,34 +78,38 @@ export default function UserProfile() {
             <TabsContent value="info">
               <div className="flex items-center space-x-4 mb-4">
                 <Avatar className="w-24 h-24">
-                  <AvatarImage src={user.profileImage} alt={user.name} />
+                  {/* <AvatarImage src={user.profileImage} alt={user.name} /> */}
                   <AvatarFallback>
-                    {user.name
+                    {user?.nome
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h2 className="text-2xl font-bold">{user.name}</h2>
-                  <p className="text-gray-500">{user.username}</p>
+                  <h2 className="text-2xl font-bold">{user?.nome}</h2>
+                  {/* <p className="text-gray-500">{user?.cargo}</p> */}
+                  <p className="text-gray-500">
+                    {user !== null &&
+                      user.cargo.charAt(0).toUpperCase() + user.cargo.slice(1)}
+                  </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <p>
-                  <strong>Email:</strong> {user.email}
+                  <strong>Email:</strong> {user?.email}
                 </p>
               </div>
             </TabsContent>
             <TabsContent value="edit">
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={() => {}} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="username">Email</Label>
                   <Input
-                    id="username"
-                    value={user.username}
-                    onChange={handleUsernameChange}
-                    placeholder="@username"
+                    id="email"
+                    value={user?.email}
+                    // onChange={handleUsernameChange}
+                    placeholder="email"
                   />
                 </div>
                 <div className="space-y-2">
@@ -151,8 +151,10 @@ export default function UserProfile() {
                       </p>
                     )}
                   </div>
+                  <div className="flex w-full justify-end">
+                    <Button type="submit">Salvar</Button>
+                  </div>
                 </div>
-                <Button type="submit">Salvar</Button>
               </form>
             </TabsContent>
           </Tabs>

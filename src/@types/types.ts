@@ -1,16 +1,18 @@
-interface Despesas {
+export interface Despesas {
   id: string;
-  preco: string; 
-  data_lancamento: string; 
-  fornecedor_id: string; 
-  num_nota: string; 
-  categorias_id: string;
-  empreendimento_id: string; 
+  data_lancamento: string;
+  fornecedor_id: string;
+  num_nota: string;
+  preco: number;
+  descricao: string;
+  empreendimento_id: string;
+  empreendimento_nome: string;
+  categoria_nome: string;
 }
 
-interface Receitas {
+export interface Receitas {
   id: string;
-  preco: string; 
+  preco: string;
   descricao: string;
   data_lanc: string;
   empreendimento_id: string;

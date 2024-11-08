@@ -15,6 +15,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
+import { Despesas } from "@/@types/types";
 
 export const columnsDespesas: ColumnDef<Despesas>[] = [
   // Coluna de seleção
@@ -57,9 +58,9 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
   },
   // Coluna do fornecedor
   {
-    accessorKey: "fornecedor_id",
+    accessorKey: "fornecedor_nome",
     header: "Fornecedor",
-    cell: ({ row }) => <div>{row.getValue("fornecedor_id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("fornecedor_nome")}</div>,
   },
   // Coluna do número da nota
   {
@@ -69,9 +70,9 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
   },
   // Coluna da categoria
   {
-    accessorKey: "categorias_id",
+    accessorKey: "categoria_nome",
     header: "Categoria",
-    cell: ({ row }) => <div>{row.getValue("categorias_id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("categoria_nome")}</div>,
   },
   //coluna de descrição
   {
@@ -83,7 +84,7 @@ export const columnsDespesas: ColumnDef<Despesas>[] = [
   {
     accessorKey: "data_lancamento",
     header: "Data de Lançamento",
-    cell: ({ row }) => <div>{row.getValue("data_lancamento")}</div>,
+    cell: ({ row }) => <div>{parseDate(row.getValue("data_lancamento"))}</div>,
   },
   {
     id: "actions",

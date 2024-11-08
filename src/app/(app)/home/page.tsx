@@ -6,6 +6,7 @@ import {
   GraficoNumClientes,
   ClientCard,
 } from "@/components/home";
+import PrivateRoute from "@/components/private-route";
 
 export default function DashboardPage() {
   const breadcrumbItems = [
@@ -22,12 +23,8 @@ export default function DashboardPage() {
         <div className="md:row-span-2 md:col-start-3 md:row-start-1">
           {/* <ClientCard /> */}
         </div>
-        <div>
-          {/* <GraficoNumClientes /> */}
-        </div>
-        <div>
-          {/* <GraficoVisitasEmpreendimento /> */}
-        </div>
+        <div>{/* <GraficoNumClientes /> */}</div>
+        <div>{/* <GraficoVisitasEmpreendimento /> */}</div>
       </div>
     </ContentLayout>
   );
