@@ -41,7 +41,10 @@ interface TableReceitaProps {
   data: Receitas[];
 }
 
-export default function TableBodyReceita({ columns, data }: TableReceitaProps) {
+export default function TableBodyReceita({
+  columns,
+  data, 
+  }: TableReceitaProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -50,7 +53,7 @@ export default function TableBodyReceita({ columns, data }: TableReceitaProps) {
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

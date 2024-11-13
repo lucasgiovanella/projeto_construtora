@@ -55,18 +55,6 @@ export const columnsReceitas: ColumnDef<Receitas>[] = [
       <div className="font-medium">R$ {row.getValue("preco")}</div>
     ),
   },
-  // Coluna da descrição
-  {
-    accessorKey: "descricao",
-    header: "Descrição",
-    cell: ({ row }) => <div>{row.getValue("descricao")}</div>,
-  },
-  // Coluna da categoria
-  {
-    accessorKey: "categorias_id",
-    header: "Categoria",
-    cell: ({ row }) => <div>{row.getValue("categorias_id")}</div>,
-  },
   // Coluna de descrição
   {
     accessorKey: "descricao",
@@ -81,11 +69,30 @@ export const columnsReceitas: ColumnDef<Receitas>[] = [
     header: "Data de Lançamento",
     cell: ({ row }) => <div>{parseDate(row.getValue("data_lanc"))}</div>,
   },
+  // Coluna da data de pagamento
+  {
+    accessorKey: "data_pag",
+    header: "Data de Pagamento",
+    cell: ({ row }) => <div>{parseDate(row.getValue("data_pag"))}</div>,
+  },
+  // Coluna da categoria
+  {
+    accessorKey: "categoria_nome",
+    header: "Categoria",
+    cell: ({ row }) => <div>{row.getValue("categoria_nome")}</div>,
+  },
   // Coluna do empreendimento
   {
-    accessorKey: "empreendimento_id",
+    accessorKey: "empreendimento_nome",
     header: "Empreendimento",
-    cell: ({ row }) => <div>{row.getValue("empreendimento_id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("empreendimento_nome")}</div>,
+  },
+
+  // Coluna do cliente
+  {
+    accessorKey: "cliente_nome",
+    header: "Cliente",
+    cell: ({ row }) => <div>{row.getValue("cliente_nome")}</div>,
   },
   // Coluna de ações
   {
