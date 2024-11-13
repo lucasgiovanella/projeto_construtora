@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Despesas } from "@/@types/types";
+import { serverUrl } from "@/lib/server/config";
 
 interface UseDespesasProps {
   data: Despesas[];
@@ -15,7 +16,7 @@ export const useDespesas = ({ data, setData }: UseDespesasProps) => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/despesas/${id}`, {
+      const response = await fetch(`${serverUrl}/api/despesas/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

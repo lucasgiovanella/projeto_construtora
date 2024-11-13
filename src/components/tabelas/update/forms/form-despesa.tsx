@@ -21,6 +21,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { serverUrl } from "@/lib/server/config";
+import { Button } from "@/components/ui/button";
 
 const despesasFormSchema = z.object({
   data_lancamento: z.date(),
@@ -47,7 +48,19 @@ interface Empreendimento {
   nome: string;
 }
 
-export default function CreateFormDespesa() {
+interface UpdateFormDespesaContentProps {
+  initialData: any;
+  isEditing: boolean;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+}
+
+export default function UpdateFormDespesaContent({
+  initialData,
+  isEditing,
+  onSuccess,
+  onCancel,
+}: UpdateFormDespesaContentProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -101,11 +114,34 @@ export default function CreateFormDespesa() {
     },
   });
 
+  useEffect(() => {
+    if (initialData && isEditing) {
+      setSelectedCategoriaId(initialData.categorias_id);
+      setSelectedFornecedorId(initialData.fornecedor_id);
+      setSelectedEmpreendimentoId(initialData.empreendimento_id);
+
+      form.reset({
+        data_lancamento: new Date(initialData.data_lancamento),
+        categorias_id: initialData.categorias_id,
+        fornecedor_id: initialData.fornecedor_id,
+        num_nota: initialData.num_nota,
+        preco: initialData.preco.toString(),
+        descricao: initialData.descricao,
+        empreendimento_id: initialData.empreendimento_id,
+      });
+    }
+  }, [initialData, isEditing, form]);
+
   async function onSubmit(values: z.infer<typeof despesasFormSchema>) {
     try {
       setIsLoading(true);
-      const response = await fetch(`${serverUrl}/api/despesas`, {
-        method: "POST",
+      const url = `${serverUrl}/api/despesas${
+        isEditing ? `/${initialData.id}` : ""
+      }`;
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -117,14 +153,21 @@ export default function CreateFormDespesa() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar despesa");
+        throw new Error(
+          isEditing ? "Erro ao atualizar despesa" : "Erro ao cadastrar despesa"
+        );
       }
 
-      form.reset();
-      alert("Despesa cadastrada com sucesso!");
+      alert(
+        isEditing
+          ? "Despesa atualizada com sucesso!"
+          : "Despesa cadastrada com sucesso!"
+      );
+
+      onSuccess?.(); // Chama o callback de sucesso
     } catch (error) {
       console.error("Erro:", error);
-      alert("Erro ao cadastrar despesa");
+      alert(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -133,7 +176,7 @@ export default function CreateFormDespesa() {
   return (
     <Form {...form}>
       <form
-        id="form-despesas"
+        id="update-form-despesas"
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
@@ -190,7 +233,7 @@ export default function CreateFormDespesa() {
                   {categorias.map((categoria) => (
                     <SelectItem
                       key={categoria.id}
-                      value={categoria.nome} // Usando nome como value
+                      value={categoria.nome}
                       className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800"
                     >
                       {categoria.nome}
@@ -210,10 +253,9 @@ export default function CreateFormDespesa() {
             <FormItem>
               <FormLabel>Fornecedor</FormLabel>
               <Select
-                value={
-                  fornecedores.find((f) => f.id === selectedFornecedorId)
-                    ?.nome || ""
-                }
+                value={selectedFornecedorId ? 
+                  fornecedores.find((f) => f.id === selectedFornecedorId)?.nome || "" 
+                  : ""}
                 onValueChange={(selectedName) => {
                   const selectedFornecedor = fornecedores.find(
                     (f) => f.nome === selectedName
@@ -330,6 +372,20 @@ export default function CreateFormDespesa() {
             </FormItem>
           )}
         />
+
+        <div className="flex justify-end gap-4 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={isLoading}
+          >
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : "Salvar alterações"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
