@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ListCategorias from "./list/list-categories";
 import CreateCategoria from "./create/create-categorie";
 import { Separator } from "../ui/separator";
+import { serverUrl } from "@/lib/server/config";
 
 type Category = {
   id: number;
@@ -14,7 +15,7 @@ const Categorias = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const fetchCategories = async () => {
-    const response = await fetch("http://localhost:3000/api/categorias", {
+    const response = await fetch(`${serverUrl}/api/categorias`, {
       credentials: "include",
     });
     const data = await response.json();
@@ -22,7 +23,7 @@ const Categorias = () => {
   };
 
   const addCategory = async (nome: string) => {
-    const response = await fetch("http://localhost:3000/api/categorias", {
+    const response = await fetch(`${serverUrl}/api/categorias`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +43,7 @@ const Categorias = () => {
   }, []);
 
   const removeCategory = async (id: number) => {
-    await fetch(`http://localhost:3000/api/categorias/${id}`, {
+    await fetch(`${serverUrl}/api/categorias/${id}`, {
       method: "DELETE",
       credentials: "include",
     });

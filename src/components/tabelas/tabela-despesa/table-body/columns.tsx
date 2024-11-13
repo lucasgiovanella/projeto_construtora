@@ -17,6 +17,7 @@ import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
 import { Despesas } from "@/@types/types";
 import { useDespesas } from "@/hooks/use-despesas";
+import UpdateFormDespesa from "../../update/update-form-despesa";
 
 export const columnsDespesas: ColumnDef<Despesas>[] = [
   // Coluna de seleção
@@ -132,7 +133,8 @@ const ActionsCell = ({ row }) => {
         >
           Copiar ID da despesa
         </DropdownMenuItem>
-        <DropdownMenuItem>Editar despesa</DropdownMenuItem>
+
+        <UpdateFormDespesa despesa={row.original} />
 
         <DropdownMenuItem
           className="text-red-400 dark:text-red-600"

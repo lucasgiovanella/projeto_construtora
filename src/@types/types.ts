@@ -17,3 +17,13 @@ export interface Receitas {
   data_lanc: string;
   empreendimento_id: string;
 }
+
+export interface Categoria {
+  id: string;
+  nome: string;
+}
+
+export interface Empreendimento {
+  id: string;
+  nome: string;
+}

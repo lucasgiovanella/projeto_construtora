@@ -54,15 +54,7 @@ export default function TableBodyDespesas({
 
   const table = useReactTable({
     data,
-    columns: columns.map(col => {
-      if (col.id === 'actions') {
-        return {
-          ...col,
-          cell: (props) => col.cell!({ ...props, setData })
-        };
-      }
-      return col;
-    }),
+    columns: columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

@@ -34,6 +34,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CreateFormReceita from "../../create/create-form-receita";
+import { Receitas } from "@/@types/types";
 
 interface TableReceitaProps {
   columns: ColumnDef<Receitas>[];

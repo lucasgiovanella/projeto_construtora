@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { columnsDespesas } from "./table-body/columns";
 import TableBodyDespesas from "./table-body";
 import { Despesas } from "@/@types/types";
+import { serverUrl } from "@/lib/server/config";
 
 const TabelaDespesa = () => {
   const [despesas, setDespesas] = useState<Despesas[]>([]);
@@ -13,7 +14,7 @@ const TabelaDespesa = () => {
   useEffect(() => {
     const fetchDespesas = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/despesas", {
+        const response = await fetch(`${serverUrl}/api/despesas`, {
           credentials: "include",
         });
 

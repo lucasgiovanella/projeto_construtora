@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import Cookies from "js-cookie";
+import { serverUrl } from "@/lib/server/config";
 
 interface User {
   id: string;
@@ -30,7 +31,7 @@ export const useAuth = create<AuthStore>()(
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const res = await fetch("http://localhost:3000/auth/login", {
+          const res = await fetch(`${serverUrl}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -54,7 +55,7 @@ export const useAuth = create<AuthStore>()(
 
       logout: async () => {
         try {
-          await fetch("http://localhost:3000/auth/logout", {
+          await fetch(`${serverUrl}/auth/logout`, {
             method: "POST",
             credentials: "include",
           });
@@ -67,7 +68,7 @@ export const useAuth = create<AuthStore>()(
 
       fetchUserData: async () => {
         try {
-          const res = await fetch("http://localhost:3000/auth/user", {
+          const res = await fetch(`${serverUrl}/auth/user`, {
             credentials: "include",
           });
 

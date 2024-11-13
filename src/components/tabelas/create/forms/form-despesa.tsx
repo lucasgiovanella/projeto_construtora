@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -21,6 +20,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { serverUrl } from "@/lib/server/config";
 
 const despesasFormSchema = z.object({
   data_lancamento: z.date(),
@@ -54,20 +54,21 @@ export default function CreateFormDespesa() {
   const [empreendimentos, setEmpreendimentos] = useState<Empreendimento[]>([]);
   const [selectedCategoriaId, setSelectedCategoriaId] = useState<string>("");
   const [selectedFornecedorId, setSelectedFornecedorId] = useState<string>("");
-  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] = useState<string>("");
+  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] =
+    useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [fornecedoresRes, categoriasRes, empreendimentosRes] =
           await Promise.all([
-            fetch("http://localhost:3000/api/fornecedores", {
+            fetch(`${serverUrl}/api/fornecedores`, {
               credentials: "include",
             }),
-            fetch("http://localhost:3000/api/categorias", {
+            fetch(`${serverUrl}/api/categorias`, {
               credentials: "include",
             }),
-            fetch("http://localhost:3000/api/empreendimentos", {
+            fetch(`${serverUrl}/api/empreendimentos`, {
               credentials: "include",
             }),
           ]);
@@ -103,7 +104,7 @@ export default function CreateFormDespesa() {
   async function onSubmit(values: z.infer<typeof despesasFormSchema>) {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api/despesas", {
+      const response = await fetch(`${serverUrl}/api/despesas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -209,9 +210,14 @@ export default function CreateFormDespesa() {
             <FormItem>
               <FormLabel>Fornecedor</FormLabel>
               <Select
-                value={fornecedores.find(f => f.id === selectedFornecedorId)?.nome || ""}
+                value={
+                  fornecedores.find((f) => f.id === selectedFornecedorId)
+                    ?.nome || ""
+                }
                 onValueChange={(selectedName) => {
-                  const selectedFornecedor = fornecedores.find(f => f.nome === selectedName);
+                  const selectedFornecedor = fornecedores.find(
+                    (f) => f.nome === selectedName
+                  );
                   if (selectedFornecedor) {
                     setSelectedFornecedorId(selectedFornecedor.id);
                     field.onChange(selectedFornecedor.id.toString());
@@ -233,7 +239,7 @@ export default function CreateFormDespesa() {
                       {fornecedor.nome}
                     </SelectItem>
                   ))}
-                </SelectContent>  
+                </SelectContent>
               </Select>
               <FormMessage />
             </FormItem>
@@ -247,9 +253,14 @@ export default function CreateFormDespesa() {
             <FormItem>
               <FormLabel>Empreendimento</FormLabel>
               <Select
-                value={empreendimentos.find(e => e.id === selectedEmpreendimentoId)?.nome || ""}
+                value={
+                  empreendimentos.find((e) => e.id === selectedEmpreendimentoId)
+                    ?.nome || ""
+                }
                 onValueChange={(selectedName) => {
-                  const selectedEmpreendimento = empreendimentos.find(e => e.nome === selectedName);
+                  const selectedEmpreendimento = empreendimentos.find(
+                    (e) => e.nome === selectedName
+                  );
                   if (selectedEmpreendimento) {
                     setSelectedEmpreendimentoId(selectedEmpreendimento.id);
                     field.onChange(selectedEmpreendimento.id.toString());
