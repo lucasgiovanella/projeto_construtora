@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { columnsDespesas } from "./table-body/columns";
 import TableBodyDespesas from "./table-body";
-import { Despesas } from "@/@types/types";
+import { Despesas } from "@/types";
 import { serverUrl } from "@/lib/server/config";
 
 const TabelaDespesa = () => {
@@ -35,6 +35,25 @@ const TabelaDespesa = () => {
     fetchDespesas();
   }, []);
 
+  const handleUpdate = async () => {
+    // Recarregar os dados após uma atualização
+    try {
+      const response = await fetch(`${serverUrl}/api/despesas`, {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar despesas");
+      }
+
+      const data = await response.json();
+      setDespesas(data);
+    } catch (error) {
+      console.error("Erro:", error);
+      setError("Erro ao recarregar despesas");
+    }
+  };
+
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
@@ -45,7 +64,11 @@ const TabelaDespesa = () => {
 
   return (
     <div className="flex flex-col bg-white w-full h-full shadow rounded dark:bg-black">
-      <TableBodyDespesas columns={columnsDespesas} data={despesas} />
+      <TableBodyDespesas 
+        columns={columnsDespesas(handleUpdate)} 
+        data={despesas}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
 };

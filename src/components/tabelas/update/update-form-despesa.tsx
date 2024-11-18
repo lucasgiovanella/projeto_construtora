@@ -1,10 +1,27 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import UpdateFormDespesaContent from "./forms/form-despesa";
 
+interface Despesa {
+  id: string;
+  data_lancamento: string;
+  categorias_id: string;
+  fornecedor_id: string;
+  num_nota: string;
+  preco: number;
+  descricao: string;
+  empreendimento_id: string;
+}
+
 interface UpdateFormDespesaProps {
-  despesa: any; // Tipo da despesa
+  despesa: Despesa;
 }
 
 export default function UpdateFormDespesa({ despesa }: UpdateFormDespesaProps) {
@@ -21,9 +38,8 @@ export default function UpdateFormDespesa({ despesa }: UpdateFormDespesaProps) {
         <DialogHeader>
           <DialogTitle>Editar Despesa</DialogTitle>
         </DialogHeader>
-        <UpdateFormDespesaContent 
-          initialData={despesa} 
-          isEditing={true} 
+        <UpdateFormDespesaContent
+          initialData={despesa}
           onSuccess={() => setIsOpen(false)}
           onCancel={() => setIsOpen(false)}
         />

@@ -1,13 +1,16 @@
 export interface Despesas {
-  id: string;
+  id: number;
   data_lancamento: string;
-  fornecedor_id: string;
+  data_pagamento?: string;
+  fornecedor_id: number;
+  categorias_id: number;
+  empreendimento_id: number;
   num_nota: string;
   preco: number;
   descricao: string;
-  empreendimento_id: string;
-  empreendimento_nome: string;
-  categoria_nome: string;
+  fornecedor_nome?: string;
+  categoria_nome?: string;
+  empreendimento_nome?: string;
 }
 
 export interface Receitas {
@@ -24,6 +27,13 @@ export interface Categoria {
 }
 
 export interface Empreendimento {
-  id: string;
+  id: number;
   nome: string;
+}
+
+export interface Fornecedor {
+  id: number;
+  nome: string;
+  razaosocial: string;
+  cnpj: string;
 }

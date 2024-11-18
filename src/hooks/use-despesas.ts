@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Despesas } from "@/@types/types";
+import { Despesas } from "@/types";
 import { serverUrl } from "@/lib/server/config";
 
 interface UseDespesasProps {
-  data: Despesas[];
-  setData: (data: Despesas[]) => void;
+  data: Despesas[] | Despesas;
+  setData: (data: Despesas[] | Despesas) => void;
 }
 
 export const useDespesas = ({ data, setData }: UseDespesasProps) => {
@@ -34,8 +34,37 @@ export const useDespesas = ({ data, setData }: UseDespesasProps) => {
     }
   };
 
+  const updateDespesa = async (despesa: Despesas) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${serverUrl}/api/despesas/${despesa.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(despesa),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar despesa");
+      }
+
+      const updatedDespesa = await response.json();
+      return updatedDespesa;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao atualizar despesa");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     deleteDespesa,
+    updateDespesa,
     isLoading,
     error,
   };
