@@ -15,7 +15,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
-import { Receitas } from "@/@types/types";
+import { Receitas } from "@/types";
 
 export const columnsReceitas: ColumnDef<Receitas>[] = [
   {

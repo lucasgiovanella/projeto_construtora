@@ -99,6 +99,13 @@ export function getMenuList(pathname: string): Group[] {
           submenus: [],
         },
         {
+          href: "/clientes",
+          label: "Clientes",
+          active: pathname.includes("/clientes"),
+          icon: Users,
+          submenus: [],
+        },
+        {
           href: "/equipe",
           label: "Equipe",
           active: pathname.includes("/equipe"),
@@ -107,6 +114,5 @@ export function getMenuList(pathname: string): Group[] {
         },
       ],
     },
-
   ];
 }

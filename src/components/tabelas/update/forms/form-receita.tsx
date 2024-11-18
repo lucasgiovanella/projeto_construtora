@@ -21,7 +21,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { serverUrl } from "@/lib/server/config";
-import { Categoria, Empreendimento } from "@/@types/types";
+import { Categoria, Empreendimento } from "@/types";
 
 const receitasFormSchema = z.object({
   data_lancamento: z.date(),

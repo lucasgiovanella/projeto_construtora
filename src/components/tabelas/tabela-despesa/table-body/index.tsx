@@ -34,17 +34,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CreateFormDespesa from "../../create/create-form-despesa";
-import { Despesas } from "@/@types/types";
+import { Despesas } from "@/types";
 
 interface TableDespesasProps {
   columns: ColumnDef<Despesas>[];
   data: Despesas[];
+  onUpdate: () => void;
 }
 
-export default function TableBodyDespesas({
-  columns,
-  data: initialData,
-}: TableDespesasProps) {
+const TableBodyDespesas = ({ columns, data: initialData, onUpdate }: TableDespesasProps) => {
   const [data, setData] = useState(initialData);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -178,4 +176,6 @@ export default function TableBodyDespesas({
       <TablePagination table={table} />
     </div>
   );
-}
+};
+
+export default TableBodyDespesas;
