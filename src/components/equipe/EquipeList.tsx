@@ -1,88 +1,89 @@
-import { Cliente } from '@/types/clientes';
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pencil, Trash2, Save } from "lucide-react";
+import { TeamMember } from "@/types/equipe";
 
-interface ClienteListProps {
-  clientes: Cliente[];
+interface EquipeListProps {
+  membros: TeamMember[];
   editando: number | null;
-  onEdit: (id: number) => void;
+  onEdit: (id: number | null) => void;
   onDelete: (id: number) => void;
-  onUpdate: (id: number, dados: { nome: string; cpf: string; email: string }) => void;
-  onChange: (id: number, dados: { nome: string; cpf: string; email: string }) => void;
+  onUpdate: (id: number, dados: { nome: string; email: string; cargo: string }) => void;
+  onChange: (id: number, dados: { nome: string; email: string; cargo: string }) => void;
 }
 
-export function ClienteList({
-  clientes,
+export function EquipeList({
+  membros,
   editando,
   onEdit,
   onDelete,
   onUpdate,
   onChange,
-}: ClienteListProps) {
+}: EquipeListProps) {
   return (
     <Card className="mt-6 rounded">
       <CardHeader>
-        <CardTitle>Lista de Clientes</CardTitle>
+        <CardTitle>Lista da Equipe</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Nome</TableHead>
-              <TableHead>CPF</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Cargo</TableHead>
               <TableHead className="text-center">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {clientes.map((cliente) => (
-              <TableRow key={cliente.id}>
+            {membros.map((membro) => (
+              <TableRow key={membro.id}>
                 <TableCell>
-                  {editando === cliente.id ? (
+                  {editando === membro.id ? (
                     <Input
-                      value={cliente.nome}
+                      value={membro.nome}
                       onChange={(e) =>
-                        onChange(cliente.id, { ...cliente, nome: e.target.value })
+                        onChange(membro.id, { ...membro, nome: e.target.value })
                       }
                     />
                   ) : (
-                    cliente.nome
+                    membro.nome
                   )}
                 </TableCell>
                 <TableCell>
-                  {editando === cliente.id ? (
+                  {editando === membro.id ? (
                     <Input
-                      value={cliente.cpf}
+                      value={membro.email}
                       onChange={(e) =>
-                        onChange(cliente.id, { ...cliente, cpf: e.target.value })
+                        onChange(membro.id, { ...membro, email: e.target.value })
                       }
                     />
                   ) : (
-                    cliente.cpf
+                    membro.email
                   )}
                 </TableCell>
                 <TableCell>
-                  {editando === cliente.id ? (
+                  {editando === membro.id ? (
                     <Input
-                      type="email"
-                      value={cliente.email}
+                      value={membro.cargo}
                       onChange={(e) =>
-                        onChange(cliente.id, { ...cliente, email: e.target.value })
+                        onChange(membro.id, { ...membro, cargo: e.target.value })
                       }
                     />
                   ) : (
-                    cliente.email
+                    membro.cargo
                   )}
                 </TableCell>
                 <TableCell className="flex justify-center space-x-2">
-                  {editando === cliente.id ? (
+                  {editando === membro.id ? (
                     <Button
                       variant="default"
                       size="icon"
-                      onClick={() => onUpdate(cliente.id, cliente)}
+                      onClick={() => onUpdate(membro.id, membro)}
                     >
                       <Save className="h-4 w-4" />
                     </Button>
@@ -90,7 +91,7 @@ export function ClienteList({
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => onEdit(cliente.id)}
+                      onClick={() => onEdit(membro.id)}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
@@ -98,7 +99,7 @@ export function ClienteList({
                   <Button
                     variant="destructive"
                     size="icon"
-                    onClick={() => onDelete(cliente.id)}
+                    onClick={() => onDelete(membro.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
