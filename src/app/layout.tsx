@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "@/providers/theme-provider";
 import PrivateRoute from "@/components/private-route";
+import { DespesasProvider } from '@/contexts/DespesasContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -24,11 +25,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <PrivateRoute>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            {children}
-          </ThemeProvider>
-        </PrivateRoute>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <DespesasProvider>
+            <PrivateRoute>
+              {children}
+            </PrivateRoute>
+          </DespesasProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

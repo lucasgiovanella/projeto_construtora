@@ -3,56 +3,28 @@
 import React, { useEffect, useState } from "react";
 import { columnsDespesas } from "./table-body/columns";
 import TableBodyDespesas from "./table-body";
-import { Despesas } from "@/types";
+import { Despesas } from "@/types/index";
 import { serverUrl } from "@/lib/server/config";
+import { useDespesasContext } from '@/contexts/DespesasContext';
 
 const TabelaDespesa = () => {
-  const [despesas, setDespesas] = useState<Despesas[]>([]);
+  const { despesas, refreshDespesas } = useDespesasContext();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDespesas = async () => {
+    const loadDespesas = async () => {
       try {
-        const response = await fetch(`${serverUrl}/api/despesas`, {
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error("Erro ao buscar despesas");
-        }
-
-        const data = await response.json();
-        setDespesas(data);
+        await refreshDespesas();
       } catch (error) {
-        console.error("Erro:", error);
         setError("Erro ao carregar despesas");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchDespesas();
-  }, []);
-
-  const handleUpdate = async () => {
-    // Recarregar os dados após uma atualização
-    try {
-      const response = await fetch(`${serverUrl}/api/despesas`, {
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Erro ao buscar despesas");
-      }
-
-      const data = await response.json();
-      setDespesas(data);
-    } catch (error) {
-      console.error("Erro:", error);
-      setError("Erro ao recarregar despesas");
-    }
-  };
+    loadDespesas();
+  }, [refreshDespesas]);
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
@@ -65,9 +37,7 @@ const TabelaDespesa = () => {
   return (
     <div className="flex flex-col bg-white w-full h-full shadow rounded dark:bg-black">
       <TableBodyDespesas 
-        columns={columnsDespesas(handleUpdate)} 
-        data={despesas}
-        onUpdate={handleUpdate}
+        onUpdate={refreshDespesas}
       />
     </div>
   );

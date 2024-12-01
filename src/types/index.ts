@@ -1,16 +1,15 @@
 export interface Despesas {
-  id: number;
+  id: string;
   data_lancamento: string;
-  data_pagamento?: string;
-  fornecedor_id: number;
-  categorias_id: number;
-  empreendimento_id: number;
+  categorias_id: string;
+  fornecedor_id: string;
   num_nota: string;
   preco: number;
   descricao: string;
-  fornecedor_nome?: string;
-  categoria_nome?: string;
-  empreendimento_nome?: string;
+  empreendimento_id: string;
+  categoria_nome?: string; // Novo campo
+  fornecedor_nome?: string; // Novo campo
+  empreendimento_nome?: string; // Novo campo
 }
 
 export interface Receitas {

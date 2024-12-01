@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/admin-panel/breadcrumb";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { FornecedorForm } from "@/components/fornecedores/FornecedorForm";
 import { FornecedorList } from "@/components/fornecedores/FornecedorList";
-import { Fornecedor } from "@/types/fornecedores";
+import { Fornecedor } from "@/types/index";
 
 export default function FornecedoresPage() {
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);

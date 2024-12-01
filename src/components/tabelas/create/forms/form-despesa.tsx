@@ -21,6 +21,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { serverUrl } from "@/lib/server/config";
+import { useDespesasContext } from '@/contexts/DespesasContext';
+import { Despesas } from '@/types/index'; // Assegure-se de importar o tipo Despesas
 
 const despesasFormSchema = z.object({
   data_lancamento: z.date(),
@@ -48,6 +50,7 @@ interface Empreendimento {
 }
 
 export default function CreateFormDespesa() {
+  const { addDespesa } = useDespesasContext();
   const [isLoading, setIsLoading] = useState(false);
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -116,10 +119,23 @@ export default function CreateFormDespesa() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao cadastrar despesa");
-      }
+      if (!response.ok) throw new Error("Erro ao cadastrar despesa");
+      
+      const novaDespesa = await response.json();
 
+      // Incluir os nomes baseados nos IDs selecionados
+      const categoria = categorias.find(cat => cat.id === novaDespesa.categorias_id);
+      const fornecedor = fornecedores.find(f => f.id === novaDespesa.fornecedor_id);
+      const empreendimento = empreendimentos.find(e => e.id === novaDespesa.empreendimento_id);
+
+      const despesaComNomes: Despesas = {
+        ...novaDespesa,
+        categoria_nome: categoria?.nome || "",
+        fornecedor_nome: fornecedor?.nome || "",
+        empreendimento_nome: empreendimento?.nome || "",
+      };
+
+      addDespesa(despesaComNomes); // Adiciona ao estado global com os nomes
       form.reset();
       alert("Despesa cadastrada com sucesso!");
     } catch (error) {

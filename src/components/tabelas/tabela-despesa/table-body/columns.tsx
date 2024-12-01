@@ -9,33 +9,54 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Copy,
+  Check,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseDate } from "@/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
-import { Despesas } from "@/types";
+import { Despesas } from "@/types/index";
 import { useDespesas } from "@/hooks/use-despesas";
-import { EditDespesaSheet } from "../edit-despesa-sheet";
+import { useDespesasContext } from "@/contexts/DespesasContext";
+import { serverUrl } from "@/lib/server/config";
 
 interface ActionsCellProps {
   row: any;
   onUpdate: () => void;
+  onEdit: (id: string) => void;
+  onSave: (id: string) => void;
+  onCancel: () => void;
+  isEditing: boolean;
 }
 
-const ActionsCell = ({ row, onUpdate }: ActionsCellProps) => {
+const ActionsCell = ({
+  row,
+  onEdit,
+  onSave,
+  onCancel,
+  isEditing,
+}: ActionsCellProps) => {
+  const { deleteDespesa } = useDespesasContext();
   const despesaId = row.original.id;
-
-  const { deleteDespesa, isLoading } = useDespesas({
-    data: row.original,
-    setData: () => {},
-  });
 
   const handleDelete = async () => {
     if (confirm("Tem certeza que deseja deletar esta despesa?")) {
       try {
-        await deleteDespesa(despesaId);
+        const response = await fetch(`${serverUrl}/api/despesas/${despesaId}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        
+        if (!response.ok) throw new Error("Erro ao deletar despesa");
+        
+        deleteDespesa(despesaId); // Remove do estado global
         alert("Despesa deletada com sucesso");
-        onUpdate(); // Chama onUpdate após deletar
       } catch (error) {
         alert("Erro ao deletar despesa");
         console.error(error);
@@ -44,36 +65,65 @@ const ActionsCell = ({ row, onUpdate }: ActionsCellProps) => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel className="underline">Ações</DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(despesaId)}
-        >
-          Copiar ID da despesa
-        </DropdownMenuItem>
-
-        <EditDespesaSheet despesa={row.original} onUpdate={onUpdate} />
-
-        <DropdownMenuItem
-          className="text-red-400 dark:text-red-600"
-          onClick={handleDelete}
-        >
-          Deletar despesa
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-2">
+      {isEditing ? (
+        <>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onSave(despesaId)}
+            className="h-8 px-2 text-green-600 hover:text-green-700 hover:bg-green-50"
+          >
+            <Check className="h-4 w-4 mr-1" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCancel}
+            className="h-8 px-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+          >
+            <X className="h-4 w-4 mr-1" />
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onEdit(despesaId)}
+            className="h-8 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+          >
+            <Pencil className="h-4 w-4 mr-1" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDelete}
+            className="h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            <Trash2 className="h-4 w-4 mr-1" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigator.clipboard.writeText(despesaId)}
+            className="h-8 px-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+          >
+            <Copy className="h-4 w-4 mr-1" />
+          </Button>
+        </>
+      )}
+    </div>
   );
 };
 
-export const columnsDespesas = (onUpdate: () => void): ColumnDef<Despesas>[] => [
-  // Coluna de seleção
+export const columnsDespesas = (
+  onUpdate: () => void,
+  onEdit: (id: string) => void,
+  onSave: (id: string) => void,
+  onCancel: () => void,
+  editingId: string | null
+): ColumnDef<Despesas>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -156,8 +206,17 @@ export const columnsDespesas = (onUpdate: () => void): ColumnDef<Despesas>[] => 
   },
   {
     id: "actions",
-    header: "Ações",
+    header: () => <div>Ações</div>,
     enableHiding: false,
-    cell: ({ row }) => <ActionsCell row={row} onUpdate={onUpdate} />,
+    cell: ({ row }) => (
+      <ActionsCell
+        row={row}
+        onUpdate={onUpdate}
+        onEdit={onEdit}
+        onSave={onSave}
+        onCancel={onCancel}
+        isEditing={editingId === row.original.id}
+      />
+    ),
   },
 ];
