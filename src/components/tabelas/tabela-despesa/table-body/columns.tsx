@@ -19,12 +19,12 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { parseDate } from "@/lib/parseDate";
+import { parseDate } from "@/providers/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
 import { Despesas } from "@/types/index";
 import { useDespesas } from "@/hooks/use-despesas";
 import { useDespesasContext } from "@/contexts/DespesasContext";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 
 interface ActionsCellProps {
   row: any;

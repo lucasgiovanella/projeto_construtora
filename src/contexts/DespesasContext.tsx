@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Despesas } from '@/types';
-import { serverUrl } from '@/lib/server/config';
+import { serverUrl } from '@/providers/lib/server/config';
 
 interface DespesasContextType {
   despesas: Despesas[];

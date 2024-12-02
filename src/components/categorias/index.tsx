@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import ListCategorias from "./list/list-categories";
 import CreateCategoria from "./create/create-categorie";
 import { Separator } from "../ui/separator";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 
 type Category = {
   id: number;

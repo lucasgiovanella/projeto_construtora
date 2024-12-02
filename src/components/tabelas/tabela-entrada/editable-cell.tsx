@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Cell, flexRender } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
@@ -8,17 +9,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Despesas, Categoria, Fornecedor, Empreendimento } from "@/types/index";
+import { Entradas, Categoria, Fornecedor, Projeto } from "@/types/index";
 import { serverUrl } from "@/providers/lib/server/config";
 import { parseDate } from "@/providers/lib/parseDate";
 import DescricaoLabel from "../assets/descricao-label";
 
 interface EditableCellProps {
-  cell: Cell<Despesas, unknown>;
+  cell: Cell<Entradas, unknown>;
   value: any;
   onChange: (value: any) => void;
-  onMultiChange?: (updates: Record<string, any>) => void; // Nova prop
-  isEditing?: boolean; // Nova prop
+  onMultiChange?: (updates: Record<string, any>) => void;
+  isEditing?: boolean;
 }
 
 export const EditableCell: React.FC<EditableCellProps> = ({
@@ -26,18 +27,18 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   value,
   onChange,
   onMultiChange,
-  isEditing = false // Valor padrão false
+  isEditing = false
 }) => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
-  const [empreendimentos, setEmpreendimentos] = useState<Empreendimento[]>([]);
+  const [projetos, setProjetos] = useState<Projeto[]>([]);
 
   const column = cell.column.id;
 
   useEffect(() => {
     const fetchData = async () => {
       if (
-        ["categoria_nome", "fornecedor_nome", "empreendimento_nome"].includes(column)
+        ["categoria_nome", "fornecedor_nome", "projeto_nome"].includes(column)
       ) {
         try {
           const endpoint =
@@ -45,7 +46,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
               ? "categorias"
               : column === "fornecedor_nome"
               ? "fornecedores"
-              : "empreendimentos";
+              : "projetos";
 
           const response = await fetch(`${serverUrl}/api/${endpoint}`, {
             credentials: "include",
@@ -62,8 +63,8 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             case "fornecedor_nome":
               setFornecedores(data);
               break;
-            case "empreendimento_nome":
-              setEmpreendimentos(data);
+            case "projeto_nome":
+              setProjetos(data);
               break;
           }
         } catch (error) {
@@ -75,7 +76,6 @@ export const EditableCell: React.FC<EditableCellProps> = ({
     fetchData();
   }, [column]);
 
-  // Se não estiver editando, retorna o valor formatado apropriado
   if (column === 'actions' || column === 'select') {
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   }
@@ -85,17 +85,17 @@ export const EditableCell: React.FC<EditableCellProps> = ({
       case 'preco':
         return <div>R$ {value}</div>;
       case 'data_lancamento':
-      case 'data_pagamento':
-        return <div>{parseDate(value)}</div>; // Usando parseDate para ambas as datas
+      case 'data_recebimento':
+        return <div>{parseDate(value)}</div>;
       case 'descricao':
-        return <DescricaoLabel title="Despesa" content={value} />;
+        return <DescricaoLabel title="Entrada" content={value} />;
       default:
         return <div>{value}</div>;
     }
   }
 
   const handleChange = (newValue: any) => {
-    onChange(newValue); // Garantir que `onChange` atualiza o contexto
+    onChange(newValue);
   };
 
   const renderEditField = () => {
@@ -164,32 +164,32 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           </Select>
         );
 
-      case "empreendimento_nome":
+      case "projeto_nome":
         return (
           <Select
             value={value || ""}
             onValueChange={(selectedName) => {
-              const selectedEmpreendimento = empreendimentos.find(
-                (e) => e.nome === selectedName
+              const selectedProjeto = projetos.find(
+                (p) => p.nome === selectedName
               );
-              if (selectedEmpreendimento) {
+              if (selectedProjeto) {
                 onMultiChange?.({
-                  empreendimento_nome: selectedEmpreendimento.nome,
-                  empreendimento_id: selectedEmpreendimento.id
+                  projeto_nome: selectedProjeto.nome,
+                  projeto_id: selectedProjeto.id
                 });
               }
             }}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Selecione um empreendimento" />
+              <SelectValue placeholder="Selecione um projeto" />
             </SelectTrigger>
             <SelectContent>
-              {empreendimentos.map((empreendimento) => (
+              {projetos.map((projeto) => (
                 <SelectItem
-                  key={empreendimento.id}
-                  value={empreendimento.nome}
+                  key={projeto.id}
+                  value={projeto.nome}
                 >
-                  {empreendimento.nome}
+                  {projeto.nome}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -207,7 +207,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           />
         );
       case "data_lancamento":
-      case "data_pagamento":
+      case "data_recebimento":
         return (
           <Input
             type="date"
@@ -228,4 +228,6 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           />
         );
     }
-  };  return <div className="w-full">{renderEditField()}</div>;};
+  };  
+  return <div className="w-full">{renderEditField()}</div>;
+};

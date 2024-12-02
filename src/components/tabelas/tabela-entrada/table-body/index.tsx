@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { exportCSV } from "@/lib/exportCSV";
+import { exportCSV } from "@/providers/lib/exportCSV";
 import { ChevronDown, Download } from "lucide-react";
 import { TablePagination } from "./table-pagination";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Despesas } from "@/types/index";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 
 interface UseDespesasProps {
   data: Despesas[] | Despesas;
