@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import Cookies from "js-cookie";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 
 interface User {
   id: string;

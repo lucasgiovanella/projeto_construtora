@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/providers/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface SidebarToggleProps {

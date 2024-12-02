@@ -30,8 +30,8 @@ import {
 } from "@/components/ui/table";
 import { TablePagination } from "./table-pagination";
 import { EditableCell } from "../editable-cell";
-import { exportCSV } from "@/lib/exportCSV";
-import { serverUrl } from "@/lib/server/config";
+import { exportCSV } from "@/providers/lib/exportCSV";
+import { serverUrl } from "@/providers/lib/server/config";
 import { Despesas } from "@/types/index";
 import CreateFormDespesa from "../../create/create-form-despesa";
 import { columnsDespesas } from "./columns";

@@ -20,7 +20,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 import { useDespesasContext } from '@/contexts/DespesasContext';
 import { Despesas } from '@/types/index'; // Assegure-se de importar o tipo Despesas
 

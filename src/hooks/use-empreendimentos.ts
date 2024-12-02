@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { serverUrl } from "@/lib/server/config";
+import { serverUrl } from "@/providers/lib/server/config";
 
 export const useEmpreendimentos = () => {
   const [empreendimentos, setEmpreendimentos] = useState([]);

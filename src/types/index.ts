@@ -12,12 +12,15 @@ export interface Despesas {
   empreendimento_nome?: string; // Novo campo
 }
 
-export interface Receitas {
+export interface Entradas {
   id: string;
-  preco: string;
-  descricao: string;
   data_lanc: string;
-  empreendimento_id: string;
+  data_pag?: string;
+  preco?: number;
+  descricao?: string;
+  categorias_id?: string;
+  empreendimento_id?: string;
+  clientes_id?: string;
 }
 
 export interface Categoria {
