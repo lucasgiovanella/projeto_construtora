@@ -1,17 +1,9 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  MoreHorizontal,
   Pencil,
   Trash2,
   Copy,
@@ -22,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { parseDate } from "@/providers/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
 import { Despesas } from "@/types/index";
-import { useDespesas } from "@/hooks/use-despesas";
 import { useDespesasContext } from "@/contexts/DespesasContext";
 import { serverUrl } from "@/providers/lib/server/config";
 
@@ -143,7 +134,6 @@ export const columnsDespesas = (
     enableSorting: false,
     enableHiding: false,
   },
-  // Coluna do valor (preco)
   {
     accessorKey: "preco",
     header: ({ column }) => {

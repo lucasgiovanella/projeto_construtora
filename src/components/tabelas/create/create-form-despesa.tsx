@@ -24,16 +24,18 @@ const CreateFormDespesa = () => {
           <Plus className="h-4 w-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Adicionar Despesa</SheetTitle>
           <SheetDescription>
             Preencha os campos abaixo para adicionar uma nova despesa.
           </SheetDescription>
         </SheetHeader>
-        <FormDespesa />
-        <SheetFooter>
-          <div className="fixed bottom-4 space-x-4">
+        <div className="py-4">
+          <FormDespesa />
+        </div>
+        <SheetFooter className="sticky bottom-0 bg-white dark:bg-zinc-950 py-4">
+          <div className="space-x-4">
             <SheetClose>
               <Button variant={"outline"}>Cancelar</Button>
             </SheetClose>

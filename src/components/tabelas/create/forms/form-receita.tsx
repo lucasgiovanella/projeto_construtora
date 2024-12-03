@@ -21,6 +21,8 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Receitas } from "@/types";
+import { useReceitasContext } from "@/contexts/ReceitasContext";
 
 const receitaFormSchema = z.object({
   empreendimento_id: z.string(),
@@ -48,28 +50,31 @@ interface Categoria {
 }
 
 export default function CreateFormReceita() {
+  const { addReceita } = useReceitasContext();
   const [isLoading, setIsLoading] = useState(false);
   const [empreendimentos, setEmpreendimentos] = useState<Empreendimento[]>([]);
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] = useState<string>("");
+  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] =
+    useState<string>("");
   const [selectedClienteId, setSelectedClienteId] = useState<string>("");
   const [selectedCategoriaId, setSelectedCategoriaId] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [empreendimentosRes, clientesRes, categoriasRes] = await Promise.all([
-          fetch("http://localhost:3000/api/empreendimentos", {
-            credentials: "include",
-          }),
-          fetch("http://localhost:3000/api/clientes", {
-            credentials: "include",
-          }),
-          fetch("http://localhost:3000/api/categorias", {
-            credentials: "include",
-          }),
-        ]);
+        const [empreendimentosRes, clientesRes, categoriasRes] =
+          await Promise.all([
+            fetch("http://localhost:3000/api/empreendimentos", {
+              credentials: "include",
+            }),
+            fetch("http://localhost:3000/api/clientes", {
+              credentials: "include",
+            }),
+            fetch("http://localhost:3000/api/categorias", {
+              credentials: "include",
+            }),
+          ]);
 
         const empreendimentosData = await empreendimentosRes.json();
         const clientesData = await clientesRes.json();
@@ -102,7 +107,6 @@ export default function CreateFormReceita() {
   async function onSubmit(values: z.infer<typeof receitaFormSchema>) {
     try {
       setIsLoading(true);
-      console.log(values);
       const response = await fetch("http://localhost:3000/api/receitas", {
         method: "POST",
         headers: {
@@ -118,6 +122,25 @@ export default function CreateFormReceita() {
       if (!response.ok) {
         throw new Error("Erro ao cadastrar receita");
       }
+
+      const novaReceita = await response.json();
+
+      const categoria = categorias.find(
+        (c) => c.id === novaReceita.categorias_id
+      );
+      const cliente = clientes.find((c) => c.id === novaReceita.clientes_id);
+      const empreendimento = empreendimentos.find(
+        (e) => e.id === novaReceita.empreendimento_id
+      );
+
+      const receitaComNomes: Receitas = {
+        ...novaReceita,
+        categoria_nome: categoria?.nome || "",
+        cliente_nome: cliente?.nome || "",
+        empreendimento_nome: empreendimento?.nome || "",
+      };
+
+      addReceita(receitaComNomes);
 
       form.reset();
       alert("Receita cadastrada com sucesso!");
@@ -143,9 +166,14 @@ export default function CreateFormReceita() {
             <FormItem>
               <FormLabel>Empreendimento</FormLabel>
               <Select
-                value={empreendimentos.find(e => e.id === selectedEmpreendimentoId)?.nome || ""}
+                value={
+                  empreendimentos.find((e) => e.id === selectedEmpreendimentoId)
+                    ?.nome || ""
+                }
                 onValueChange={(selectedName) => {
-                  const selectedEmpreendimento = empreendimentos.find(e => e.nome === selectedName);
+                  const selectedEmpreendimento = empreendimentos.find(
+                    (e) => e.nome === selectedName
+                  );
                   if (selectedEmpreendimento) {
                     setSelectedEmpreendimentoId(selectedEmpreendimento.id);
                     field.onChange(selectedEmpreendimento.id.toString());
@@ -181,9 +209,13 @@ export default function CreateFormReceita() {
             <FormItem>
               <FormLabel>Cliente</FormLabel>
               <Select
-                value={clientes.find(c => c.id === selectedClienteId)?.nome || ""}
+                value={
+                  clientes.find((c) => c.id === selectedClienteId)?.nome || ""
+                }
                 onValueChange={(selectedName) => {
-                  const selectedCliente = clientes.find(c => c.nome === selectedName);
+                  const selectedCliente = clientes.find(
+                    (c) => c.nome === selectedName
+                  );
                   if (selectedCliente) {
                     setSelectedClienteId(selectedCliente.id);
                     field.onChange(selectedCliente.id.toString());
@@ -219,9 +251,14 @@ export default function CreateFormReceita() {
             <FormItem>
               <FormLabel>Categoria</FormLabel>
               <Select
-                value={categorias.find(c => c.id === selectedCategoriaId)?.nome || ""}
+                value={
+                  categorias.find((c) => c.id === selectedCategoriaId)?.nome ||
+                  ""
+                }
                 onValueChange={(selectedName) => {
-                  const selectedCategoria = categorias.find(c => c.nome === selectedName);
+                  const selectedCategoria = categorias.find(
+                    (c) => c.nome === selectedName
+                  );
                   if (selectedCategoria) {
                     setSelectedCategoriaId(selectedCategoria.id);
                     field.onChange(selectedCategoria.id.toString());
@@ -323,7 +360,6 @@ export default function CreateFormReceita() {
             </FormItem>
           )}
         />
-
       </form>
     </Form>
   );

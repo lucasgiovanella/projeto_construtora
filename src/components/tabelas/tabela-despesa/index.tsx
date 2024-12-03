@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { columnsDespesas } from "./table-body/columns";
 import TableBodyDespesas from "./table-body";
-import { Despesas } from "@/types/index";
-import { serverUrl } from "@/providers/lib/server/config";
 import { useDespesasContext } from '@/contexts/DespesasContext';
 
 const TabelaDespesa = () => {

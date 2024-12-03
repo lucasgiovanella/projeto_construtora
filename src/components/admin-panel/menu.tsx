@@ -23,7 +23,8 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
+  const { user } = useAuth();
+  const menuList = getMenuList(pathname, user?.cargo);
   const { logout } = useAuth();
   const router = useRouter();
 

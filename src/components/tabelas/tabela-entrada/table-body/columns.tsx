@@ -1,28 +1,13 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-  Copy,
-  Check,
-  X,
-} from "lucide-react";
+import { ArrowUpDown, Copy, Pencil, Trash2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Receitas } from "@/types";
+import { useReceitasContext } from "@/contexts/ReceitasContext";
 import { parseDate } from "@/providers/lib/parseDate";
 import DescricaoLabel from "../../assets/descricao-label";
-import { Entradas } from "@/types/index";
-import { useEntradasContext } from "@/contexts/EntradasContext";
 import { serverUrl } from "@/providers/lib/server/config";
 
 interface ActionsCellProps {
@@ -41,23 +26,23 @@ const ActionsCell = ({
   onCancel,
   isEditing,
 }: ActionsCellProps) => {
-  const { deleteEntrada } = useEntradasContext();
-  const entradaId = row.original.id;
+  const { deleteReceita } = useReceitasContext();
+  const receitaId = row.original.id;
 
   const handleDelete = async () => {
-    if (confirm("Tem certeza que deseja deletar esta entrada?")) {
+    if (confirm("Tem certeza que deseja deletar esta despesa?")) {
       try {
-        const response = await fetch(`${serverUrl}/api/entradas/${entradaId}`, {
+        const response = await fetch(`${serverUrl}/api/receitas/${receitaId}`, {
           method: "DELETE",
           credentials: "include",
         });
         
-        if (!response.ok) throw new Error("Erro ao deletar entrada");
+        if (!response.ok) throw new Error("Erro ao deletar despesa");
         
-        deleteEntrada(entradaId); // Remove do estado global
-        alert("Entrada deletada com sucesso");
+        deleteReceita(receitaId); // Remove do estado global
+        alert("Despesa deletada com sucesso");
       } catch (error) {
-        alert("Erro ao deletar entrada");
+        alert("Erro ao deletar despesa");
         console.error(error);
       }
     }
@@ -70,7 +55,7 @@ const ActionsCell = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onSave(entradaId)}
+            onClick={() => onSave(receitaId)}
             className="h-8 px-2 text-green-600 hover:text-green-700 hover:bg-green-50"
           >
             <Check className="h-4 w-4 mr-1" />
@@ -89,7 +74,7 @@ const ActionsCell = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onEdit(entradaId)}
+            onClick={() => onEdit(receitaId)}
             className="h-8 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
           >
             <Pencil className="h-4 w-4 mr-1" />
@@ -105,7 +90,7 @@ const ActionsCell = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigator.clipboard.writeText(entradaId)}
+            onClick={() => navigator.clipboard.writeText(receitaId)}
             className="h-8 px-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
           >
             <Copy className="h-4 w-4 mr-1" />
@@ -116,13 +101,13 @@ const ActionsCell = ({
   );
 };
 
-export const columnsEntradas = (
+export const columnsReceitas = (
   onUpdate: () => void,
   onEdit: (id: string) => void,
   onSave: (id: string) => void,
   onCancel: () => void,
   editingId: string | null
-): ColumnDef<Entradas>[] => [
+): ColumnDef<Receitas>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -142,70 +127,56 @@ export const columnsEntradas = (
     enableSorting: false,
     enableHiding: false,
   },
-  // Coluna do valor (preco)
   {
     accessorKey: "preco",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Valor
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Valor
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
       <div className="font-medium">R$ {row.getValue("preco")}</div>
     ),
   },
-  // Coluna do fornecedor
-  {
-    accessorKey: "fornecedor_nome",
-    header: "Fornecedor",
-    cell: ({ row }) => <div>{row.getValue("fornecedor_nome")}</div>,
-  },
-  // Coluna do número da nota
-  {
-    accessorKey: "num_nota",
-    header: "Nº Nota",
-    cell: ({ row }) => <div>{row.getValue("num_nota")}</div>,
-  },
-  // Coluna da categoria
   {
     accessorKey: "categoria_nome",
     header: "Categoria",
     cell: ({ row }) => <div>{row.getValue("categoria_nome")}</div>,
   },
   {
-    accessorKey: "projeto_nome",
-    header: "Projeto",
-    cell: ({ row }) => <div>{row.getValue("projeto_nome")}</div>,
+    accessorKey: "cliente_nome",
+    header: "Cliente",
+    cell: ({ row }) => <div>{row.getValue("cliente_nome")}</div>,
   },
-  //coluna de descrição
+  {
+    accessorKey: "empreendimento_nome",
+    header: "Empreendimento",
+    cell: ({ row }) => <div>{row.getValue("empreendimento_nome")}</div>,
+  },
   {
     accessorKey: "descricao",
     header: "Descrição",
     cell: ({ row }) => (
-      <DescricaoLabel title="Entrada" content={row.getValue("descricao")} />
+      <DescricaoLabel title="Receita" content={row.getValue("descricao")} />
     ),
   },
-  // Coluna da data de lançamento
   {
-    accessorKey: "data_lancamento",
-    header: "Data de Lançamento",
-    cell: ({ row }) => <div>{parseDate(row.getValue("data_lancamento"))}</div>,
+    accessorKey: "data_lanc",
+    header: "Data Lançamento",
+    cell: ({ row }) => <div>{parseDate(row.getValue("data_lanc"))}</div>,
   },
-  // Coluna de data de recebimento
   {
-    accessorKey: "data_recebimento",
-    header: "Data de Recebimento",
-    cell: ({ row }) => <div>{parseDate(row.getValue("data_recebimento"))}</div>,
+    accessorKey: "data_pag",
+    header: "Data Pagamento",
+    cell: ({ row }) => <div>{parseDate(row.getValue("data_pag"))}</div>,
   },
   {
     id: "actions",
-    header: () => <div>Ações</div>,
+    header: "Ações",
     enableHiding: false,
     cell: ({ row }) => (
       <ActionsCell

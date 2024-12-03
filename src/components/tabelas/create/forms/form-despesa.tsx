@@ -26,6 +26,7 @@ import { Despesas } from '@/types/index'; // Assegure-se de importar o tipo Desp
 
 const despesasFormSchema = z.object({
   data_lancamento: z.date(),
+  data_pagamento: z.date(),
   categorias_id: z.string(),
   fornecedor_id: z.string(),
   num_nota: z.string(),
@@ -95,6 +96,7 @@ export default function CreateFormDespesa() {
     resolver: zodResolver(despesasFormSchema),
     defaultValues: {
       data_lancamento: new Date(),
+      data_pagamento: new Date(),
       categorias_id: selectedCategoriaId,
       fornecedor_id: "",
       num_nota: "",
@@ -151,7 +153,7 @@ export default function CreateFormDespesa() {
       <form
         id="form-despesas"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
+        className="space-y-6 pb-10"
       >
         <FormField
           control={form.control}
@@ -159,6 +161,29 @@ export default function CreateFormDespesa() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Data do Lançamento</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  {...field}
+                  value={
+                    field.value
+                      ? new Date(field.value).toISOString().split("T")[0]
+                      : ""
+                  }
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="data_pagamento"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Data do Pagamento</FormLabel>
               <FormControl>
                 <Input
                   type="date"

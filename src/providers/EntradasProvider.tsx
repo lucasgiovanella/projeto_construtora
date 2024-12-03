@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { EntradasProvider } from '@/contexts/EntradasContext';
+import { EntradasProvider } from '@/contexts/ReceitasContext';
 
 const EntradasProviderWrapper = ({ children }: { children: React.ReactNode }) => {
   return (

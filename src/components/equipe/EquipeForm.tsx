@@ -36,7 +36,7 @@ interface EquipeFormProps {
 export function EquipeForm({ onSubmit }: EquipeFormProps) {
   const cargos = [
     { id: "gerente", nome: "Gerente" },
-    { id: "usuario", nome: "Usuário" },
+    { id: "financeiro", nome: "Financeiro" },
   ];
 
   const form = useForm<z.infer<typeof equipeFormSchema>>({
@@ -55,13 +55,16 @@ export function EquipeForm({ onSubmit }: EquipeFormProps) {
   };
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 rounded">
       <CardHeader>
         <CardTitle>Adicionar Membro da Equipe</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="nome"

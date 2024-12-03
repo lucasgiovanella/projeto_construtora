@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Despesas, Categoria, Fornecedor, Empreendimento } from "@/types/index";
+import { Despesas, Categoria, Empreendimento } from "@/types/index";
 import { serverUrl } from "@/providers/lib/server/config";
 import { parseDate } from "@/providers/lib/parseDate";
 import DescricaoLabel from "../assets/descricao-label";
@@ -21,12 +21,17 @@ interface EditableCellProps {
   isEditing?: boolean; // Nova prop
 }
 
+interface Fornecedor {
+  id: string;
+  nome: string;
+}
+
 export const EditableCell: React.FC<EditableCellProps> = ({
   cell,
   value,
   onChange,
   onMultiChange,
-  isEditing = false // Valor padrão false
+  isEditing = false, // Valor padrão false
 }) => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
@@ -37,7 +42,9 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       if (
-        ["categoria_nome", "fornecedor_nome", "empreendimento_nome"].includes(column)
+        ["categoria_nome", "fornecedor_nome", "empreendimento_nome"].includes(
+          column
+        )
       ) {
         try {
           const endpoint =
@@ -76,18 +83,18 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   }, [column]);
 
   // Se não estiver editando, retorna o valor formatado apropriado
-  if (column === 'actions' || column === 'select') {
+  if (column === "actions" || column === "select") {
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   }
-  
+
   if (!isEditing) {
     switch (column) {
-      case 'preco':
+      case "preco":
         return <div>R$ {value}</div>;
-      case 'data_lancamento':
-      case 'data_pagamento':
+      case "data_lancamento":
+      case "data_pagamento":
         return <div>{parseDate(value)}</div>; // Usando parseDate para ambas as datas
-      case 'descricao':
+      case "descricao":
         return <DescricaoLabel title="Despesa" content={value} />;
       default:
         return <div>{value}</div>;
@@ -111,7 +118,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
               if (selectedCategoria) {
                 onMultiChange?.({
                   categoria_nome: selectedCategoria.nome,
-                  categorias_id: selectedCategoria.id
+                  categorias_id: selectedCategoria.id,
                 });
               }
             }}
@@ -121,10 +128,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             </SelectTrigger>
             <SelectContent>
               {categorias.map((categoria) => (
-                <SelectItem
-                  key={categoria.id}
-                  value={categoria.nome}
-                >
+                <SelectItem key={categoria.id} value={categoria.nome}>
                   {categoria.nome}
                 </SelectItem>
               ))}
@@ -143,7 +147,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
               if (selectedFornecedor) {
                 onMultiChange?.({
                   fornecedor_nome: selectedFornecedor.nome,
-                  fornecedor_id: selectedFornecedor.id
+                  fornecedor_id: selectedFornecedor.id,
                 });
               }
             }}
@@ -153,10 +157,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             </SelectTrigger>
             <SelectContent>
               {fornecedores.map((fornecedor) => (
-                <SelectItem
-                  key={fornecedor.id}
-                  value={fornecedor.nome}
-                >
+                <SelectItem key={fornecedor.id} value={fornecedor.nome}>
                   {fornecedor.nome}
                 </SelectItem>
               ))}
@@ -175,7 +176,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
               if (selectedEmpreendimento) {
                 onMultiChange?.({
                   empreendimento_nome: selectedEmpreendimento.nome,
-                  empreendimento_id: selectedEmpreendimento.id
+                  empreendimento_id: selectedEmpreendimento.id,
                 });
               }
             }}
@@ -185,10 +186,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             </SelectTrigger>
             <SelectContent>
               {empreendimentos.map((empreendimento) => (
-                <SelectItem
-                  key={empreendimento.id}
-                  value={empreendimento.nome}
-                >
+                <SelectItem key={empreendimento.id} value={empreendimento.nome}>
                   {empreendimento.nome}
                 </SelectItem>
               ))}
@@ -228,4 +226,6 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           />
         );
     }
-  };  return <div className="w-full">{renderEditField()}</div>;};
+  };
+  return <div className="w-full">{renderEditField()}</div>;
+};
